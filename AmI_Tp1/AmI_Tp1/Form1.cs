@@ -40,7 +40,7 @@ namespace AmI_Tp1
         }
 
         private void button2_Click(object sender, EventArgs e)
-        { 
+        {
             //Analise de eventos Keystroke
             if (VerResult.Text.Equals("Análise de eventos Keystroke"))
             {

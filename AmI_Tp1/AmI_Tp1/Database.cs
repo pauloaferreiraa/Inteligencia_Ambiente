@@ -49,7 +49,7 @@ namespace AmI_Tp1
         public int getTableId(string table)
         {
             string column_name = "id" + table;
-            string query = "select " + column_name + " from" + table + "order by idWritingTime desc limit 1;";
+            string query = "select " + column_name + " from " + table + " order by " + column_name + " desc limit 1";
             int id = 0;
             MySqlDataReader reader = null;
             try
@@ -63,7 +63,7 @@ namespace AmI_Tp1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.ToString());
             }
 
             return id;

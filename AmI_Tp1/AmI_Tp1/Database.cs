@@ -18,7 +18,7 @@ namespace AmI_Tp1
             connection = new MySqlConnection("SERVER=" + server + ";DATABASE=" + database + ";UID=" + uid + ";PASSWORD=" + password);
         }
 
-        public void insert(string query)
+        public void insertDB(string query)
         {
             try
             {
@@ -29,6 +29,21 @@ namespace AmI_Tp1
             {
                 Console.WriteLine(e.Message);
             }
+        }
+
+        public MySqlDataReader getResultsDB(string query)
+        {
+            MySqlDataReader reader = null;
+            try
+            {
+                command = new MySqlCommand(query,connection);
+                reader = command.ExecuteReader();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+            return reader;
         }
 
         public bool connect()

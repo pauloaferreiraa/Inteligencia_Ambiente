@@ -20,7 +20,7 @@ namespace AmI_Tp1
         public void init(string utilizador, string file, Database db) {
             this.db = db;
             db.connect();
-            db.insertDB("Insert into Utilizador (Nome) select* from (select'"+utilizador+ "') as tmp WHERE NOT EXISTS (SELECT Nome FROM Utilizador WHERE Nome = '"+utilizador+"') LIMIT 1; ");
+            db.insertDB("Insert into Utilizador (Nome) select * from (select '"+utilizador+ "') as tmp WHERE NOT EXISTS (SELECT Nome FROM Utilizador WHERE Nome = '"+utilizador+"') LIMIT 1; ");
             ler(file);
             constrHand();            
         }

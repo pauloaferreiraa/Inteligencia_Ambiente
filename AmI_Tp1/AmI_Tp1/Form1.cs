@@ -15,7 +15,7 @@ namespace AmI_Tp1
     {
         
         ProcDados pD = new ProcDados();
-        Database db = new Database("localhost","mydb","root","");
+        Database db = new Database("localhost","mydb","root","SLpaulO25");
         public Form1()
         {
             InitializeComponent();

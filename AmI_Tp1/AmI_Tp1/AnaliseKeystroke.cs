@@ -22,8 +22,8 @@ namespace AmI_Tp1
             this.f1 = f1;
             InitializeComponent();
            
-            showTop10.Text = pD.top10Keystrokes();
-            BackSpaceKey.Text = pD.nBackSpaces().ToString()+"%";
+            //showTop10.Text = pD.top10Keystrokes();
+            //BackSpaceKey.Text = pD.nBackSpaces().ToString()+"%";
         }
 
        

@@ -12,10 +12,14 @@ namespace AmI_Tp1
          List<string> events = new List<string>();
          List<string> keys = new List<string>();
          List<Tuple<int, string, string, string>> dados = new List<Tuple<int, string, string, string>>();
-
+         Database db;
+         int id_BackspaceCaracter;
+      
 
         public void init(string utilizador, string file, Database db) {
+            this.db = db;
             db.connect();
+            db.insertDB("Insert into Utilizador (Nome) select* from (select'"+utilizador+ "') as tmp WHERE NOT EXISTS (SELECT Nome FROM Utilizador WHERE Nome = '"+utilizador+"') LIMIT 1; ");
             ler(file);
             constrHand();            
         }
@@ -89,7 +93,7 @@ namespace AmI_Tp1
 
 
 
-        public float nBackSpaces()
+        public void nBackSpacesCaracter()
         {
             int count = 0;
             foreach (string s in keys)
@@ -99,10 +103,12 @@ namespace AmI_Tp1
                     count++;
                 }
             }
-            return (count / Convert.ToSingle(keys.Count)) * 100;
+            id_BackspaceCaracter = db.getTableId("BackspaceCaracter");
+            db.insertDB("Insert into BackSpaceCaracter (idBackspace, Percentagem) values("+id_BackspaceCaracter+","+ (count / Convert.ToDouble(keys.Count)) * 100+");");
+            
         }
 
-        public string top10Keystrokes()
+        public void top10Keystrokes()
         {
             Dictionary<string, int> top = new Dictionary<string, int>();
             StringBuilder sb = new StringBuilder();
@@ -118,12 +124,12 @@ namespace AmI_Tp1
                 }
 
             }
-            int line = 1;
+            //int line = 1;
             
             foreach (var item in top.OrderByDescending(r => r.Value).Take(10))
             {
                 
-                float valor = item.Value / (Convert.ToSingle(keys.Count)) * 100;
+               /* float valor = item.Value / (Convert.ToSingle(keys.Count)) * 100;
                 sb.Append(line.ToString("00"));
                 sb.Append("-  ");
                 sb.Append(item.Key);
@@ -131,9 +137,9 @@ namespace AmI_Tp1
                 sb.Append(valor.ToString()+"%");
                 sb.AppendLine();
                 line++;
-
+                */
             }           
-            return sb.ToString();
+            //return sb.ToString();
         }
 
         public string DigraphAnalysis()
@@ -328,6 +334,24 @@ namespace AmI_Tp1
         }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+        //Analise de palavras
+
+
+
+
+ 
 
 
 

@@ -17,8 +17,7 @@ namespace AmI_Tp1
         public void init(string utilizador, string file, Database db) {
             db.connect();
             ler(file);
-            constrHand();
-            
+            constrHand();            
         }
 
 

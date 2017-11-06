@@ -14,6 +14,7 @@ namespace AmI_Tp1
          List<Tuple<int, string, string, string>> dados = new List<Tuple<int, string, string, string>>();
          Database db;
          int id_BackspaceCaracter;
+        int idTop10;
       
 
         public void init(string utilizador, string file, Database db) {
@@ -103,9 +104,9 @@ namespace AmI_Tp1
                     count++;
                 }
             }
-            id_BackspaceCaracter = db.getTableId("BackspaceCaracter");
-            db.insertDB("Insert into BackSpaceCaracter (idBackspace, Percentagem) values("+id_BackspaceCaracter+","+ (count / Convert.ToDouble(keys.Count)) * 100+");");
             
+            db.insertDB("Insert into BackSpaceCaracter (Percentagem) values("+ (count / Convert.ToDouble(keys.Count)) * 100+");");
+            id_BackspaceCaracter = db.getTableId("BackspaceCaracter");
         }
 
         public void top10Keystrokes()
@@ -128,7 +129,8 @@ namespace AmI_Tp1
             
             foreach (var item in top.OrderByDescending(r => r.Value).Take(10))
             {
-                
+                double valor = item.Value / (Convert.ToDouble(keys.Count)) * 100;
+                db.insertDB("Insert into Chars (Char, Percentagem,Top10) values("+item.Key+","+valor+","+ idTop10+");");
                /* float valor = item.Value / (Convert.ToSingle(keys.Count)) * 100;
                 sb.Append(line.ToString("00"));
                 sb.Append("-  ");

@@ -8,29 +8,56 @@ namespace AmI_Tp1
 {
     public class ProcDados
     {
-        List<int> time = new List<int>();
-        List<string> events = new List<string>();
-        List<string> keys = new List<string>();
+        string utilizador;
+         List<int> time = new List<int>();
+         List<string> events = new List<string>();
+         List<string> keys = new List<string>();
+
         List<Tuple<int, string, string, string>> dados = new List<Tuple<int, string, string, string>>();
+        // tempo , caracter1 , caracter2 , Par
+
+        List<Tuple<int, string, bool, int>> palavras = new List<Tuple<int, string, bool, int>>();
+        // delta time , palavra, Existencia de backSpace, comprimento
+
+
+        
+
         Database db;
-        int id_BackspaceCaracter;
+         int id_BackspaceCaracter;
+        int id_BackSpacePalavra;
         int idTop10;
+        int idData;
+        int id_LatenciaPalavras;
+        int idWrittingTime;
 
 
-        public void init(string utilizador, string file, Database db)
-        {
+
+
+
+        public void init(string utilizador, string file, Database db) {
             this.db = db;
+            this.utilizador = utilizador;
             db.connect();
-            db.insertDB("Insert into Utilizador (Nome) select * from (select '" + utilizador +
-                        "') as tmp WHERE NOT EXISTS (SELECT Nome FROM Utilizador WHERE Nome = '" + utilizador +
-                        "') LIMIT 1; ");
+            db.insertDB("Insert into Utilizador (Nome) select* from (select '"+utilizador+ "') as tmp WHERE NOT EXISTS (SELECT Nome FROM Utilizador WHERE Nome = '"+utilizador+"') LIMIT 1; ");
+
             ler(file);
             constrHand();
+            prePalavras();
+
+            BackSpacesCaracter();
+            BackspacePalavra();
+            LatenciaPalavras();
+            DigraphAnalysis();
+            desvioMediaCompWords();
+            BackspaceCorrigidas();
+            Top10();
+            top10Keystrokes();
+            top10Palavras();
         }
 
 
 
-        public void ler(string file)
+        public void ler(string file) 
         {
             String line;
             System.IO.StreamReader File = new System.IO.StreamReader(@file);
@@ -40,6 +67,7 @@ namespace AmI_Tp1
                 time.Add(Convert.ToInt32(substrings[0]));
                 events.Add(substrings[1]);
                 keys.Add(substrings[2]);
+                
             }
             File.Close();
         }
@@ -88,15 +116,15 @@ namespace AmI_Tp1
                 }
 
                 dados.Add(new Tuple<int, string, string, string>(x, keys[i], keys[i + 1], fst + "-" + snd));
-
+                
 
             }
-
+          
         }
 
 
 
-        public void nBackSpacesCaracter()
+        public void BackSpacesCaracter()
         {
             int count = 0;
             foreach (string s in keys)
@@ -106,9 +134,8 @@ namespace AmI_Tp1
                     count++;
                 }
             }
-
-            db.insertDB("Insert into BackSpaceCaracter (Percentagem) values(" +
-                        (count / Convert.ToDouble(keys.Count)) * 100 + ");");
+            
+            db.insertDB("Insert into BackSpaceCaracter (Percentagem) values("+ (count / Convert.ToDouble(keys.Count)) * 100+");");
             id_BackspaceCaracter = db.getTableId("BackspaceCaracter");
         }
 
@@ -128,27 +155,26 @@ namespace AmI_Tp1
                 }
 
             }
-            //int line = 1;
-
+            
+            
             foreach (var item in top.OrderByDescending(r => r.Value).Take(10))
             {
                 double valor = item.Value / (Convert.ToDouble(keys.Count)) * 100;
-                db.insertDB("Insert into Chars (Char, Percentagem,Top10) values(" + item.Key + "," + valor + "," +
-                            idTop10 + ");");
-                /* float valor = item.Value / (Convert.ToSingle(keys.Count)) * 100;
-                 sb.Append(line.ToString("00"));
-                 sb.Append("-  ");
-                 sb.Append(item.Key);
-                 sb.Append(' ', 15 - item.Key.Length);
-                 sb.Append(valor.ToString()+"%");
-                 sb.AppendLine();
-                 line++;
-                 */
-            }
-            //return sb.ToString();
+                db.insertDB("Insert into Chars (Char, Percentagem,Top10) values('"+item.Key+"',"+valor+","+ idTop10+");");
+               /* float valor = item.Value / (Convert.ToSingle(keys.Count)) * 100;
+                sb.Append(line.ToString("00"));
+                sb.Append("-  ");
+                sb.Append(item.Key);
+                sb.Append(' ', 15 - item.Key.Length);
+                sb.Append(valor.ToString()+"%");
+                sb.AppendLine();
+                line++;
+                */
+            }           
+            
         }
 
-        public string DigraphAnalysis()
+        public void DigraphAnalysis()
         {
             double soma = 0;
             double somaLL = 0;
@@ -317,33 +343,54 @@ namespace AmI_Tp1
             double StdDevSR = Math.Sqrt(somaDiffDaMediaSR / (countSR));
             double StdDevSS = Math.Sqrt(somaDiffDaMediaSS / (countSS));
 
-            return "Mean of the writing time of all Key Events: " + mediaAll +
-                   "\nStandard Deviation of the writing time of all Key Events:" + StdDev +
-                   "\nMean of the writing time of LL key groupings:" + mediaLL +
-                   "\nStandard Deviation of the writing time of LL key groupings:" + StdDevLL +
-                   "\nMean of the writing time of LR key groupings:" + mediaLR +
-                   "\nStandard Deviation of the writing time of LR key groupings:" + StdDevLR +
-                   "\nMean of the writing time of LS key groupings:" + mediaLS +
-                   "\nStandard Deviation of the writing time of LS key groupings:" + StdDevLS +
-                   "\nMean of the writing time of RL key groupings:" + mediaRL +
-                   "\nStandard Deviation of the writing time of RL key groupings:" + StdDevRL +
-                   "\nMean of the writing time of RR key groupings:" + mediaRR +
-                   "\nStandard Deviation of the writing time of RR key groupings:" + StdDevRR +
-                   "\nMean of the writing time of RS key groupings:" + mediaRS +
-                   "\nStandard Deviation of the writing time of RS key groupings:" + StdDevRS +
-                   "\nMean of the writing time of SL key groupings:" + mediaSL +
-                   "\nStandard Deviation of the writing time of SL key groupings:" + StdDevSL +
-                   "\nMean of the writing time of SR key groupings:" + mediaSR +
-                   "\nStandard Deviation of the writing time of SR key groupings:" + StdDevSR +
-                   "\nMean of the writing time of SS key groupings:" + mediaSS +
-                   "\nStandard Deviation of the writing time of SS key groupings:" + StdDevSS;
-            ;
+
+            db.insertDB("Insert into WritingTime (Media,Desvio_Padrao) values("+mediaAll+","+StdDev+");");
+            idWrittingTime = db.getTableId("WritingTime");
+            Data();
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('LL',"+mediaLL+","+idData+","+StdDevLL+");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('LR'," + mediaLR + "," + idData + "," + StdDevLR + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('LS'," + mediaLS + "," + idData + "," + StdDevLS + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('RL'," + mediaRL + "," + idData + "," + StdDevRL + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('RR'," + mediaRR + "," + idData + "," + StdDevRR + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('RS'," + mediaRS + "," + idData + "," + StdDevRS + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('SL'," + mediaSL + "," + idData + "," + StdDevSL + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('SR'," + mediaSR + "," + idData + "," + StdDevSR + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('SS'," + mediaSS + "," + idData + "," + StdDevSS + ");");
+            /* return "Mean of the writing time of all Key Events: " + mediaAll +
+                      "\nStandard Deviation of the writing time of all Key Events:" + StdDev +
+                      "\nMean of the writing time of LL key groupings:" + mediaLL +
+                      "\nStandard Deviation of the writing time of LL key groupings:" + StdDevLL +
+                      "\nMean of the writing time of LR key groupings:" + mediaLR +
+                      "\nStandard Deviation of the writing time of LR key groupings:" + StdDevLR +
+                      "\nMean of the writing time of LS key groupings:" + mediaLS +
+                      "\nStandard Deviation of the writing time of LS key groupings:" + StdDevLS +
+                      "\nMean of the writing time of RL key groupings:" + mediaRL +
+                      "\nStandard Deviation of the writing time of RL key groupings:" + StdDevRL +
+                      "\nMean of the writing time of RR key groupings:" + mediaRR +
+                      "\nStandard Deviation of the writing time of RR key groupings:" + StdDevRR +
+                      "\nMean of the writing time of RS key groupings:" + mediaRS +
+                      "\nStandard Deviation of the writing time of RS key groupings:" + StdDevRS +
+                      "\nMean of the writing time of SL key groupings:" + mediaSL +
+                      "\nStandard Deviation of the writing time of SL key groupings:" + StdDevSL +
+                      "\nMean of the writing time of SR key groupings:" + mediaSR +
+                      "\nStandard Deviation of the writing time of SR key groupings:" + StdDevSR +
+                      "\nMean of the writing time of SS key groupings:" + mediaSS +
+                      "\nStandard Deviation of the writing time of SS key groupings:" + StdDevSS; ;*/
         }
 
 
+        public void Top10()
+        {
+            db.insertDB("insert into Top10(idData) values(" + idData + ");");
+            idTop10 = db.getTableId("Top10");
+        }
 
-
-
+        public void Data() {
+            db.insertDB("insert into Data(Data, Utilizador, Backspace_idBackspace, WritingTime_idWritingTime, " +
+                        "LatenciaPalavras_idLatenciaPalavras, BackspacePalavra_idBackspace)values(NOW(),'"+utilizador+"',"+id_BackspaceCaracter+","
+                                                                                                 +idWrittingTime+","+id_LatenciaPalavras+","+id_BackSpacePalavra+");");
+            idData = db.getTableId("Data");
+        }
 
 
 
@@ -356,104 +403,313 @@ namespace AmI_Tp1
         //Analise de palavras
 
 
-        class StringAnalysis
+        public void prePalavras()
         {
-            public string word;
-            public int ordem;
-            public bool corrected;
-            public int firstKE;
-            public int lastKE;
-            public int initTime;
-            public int endTime;
+            Hand h = new Hand();
+            StringBuilder pal = new StringBuilder();
+            bool backSp = false; // existencia de backSpace
+            int timeI = 0; //tempo da key do inicio da palavra
+            List<int> Newtime = new List<int>();
+            List<string> Newkeys = new List<string>();
 
-            public StringAnalysis(string w, int ord, bool corr, int fKE, int lKE, int iT, int eT)
+            int comp = 0;
+
+            PreProcPalavras(Newkeys, Newtime);
+
+
+
+            for (int i = 0; i < Newkeys.Count; i++)
             {
-                word = w;
-                ordem = ord;
-                corrected = corr;
-                firstKE = fKE;
-                lastKE = lKE;
-                initTime = iT;
-                endTime = eT;
-            }
-        }
-
-        class WordAnalysis
-        {
-            public string word;
-            public int n_times = 0;
-
-            public WordAnalysis(string w, int n_t)
-            {
-                word = w;
-                n_times = n_t;
-            }
-        }
-
-        enum CarachterDelimitators { Space, Oemcomma, OemPeriod, OemMinus }
-        public string AnalisePalavras() //todo Fazer analise completa das palavras
-        {
-            bool corrected = false;
-            List<string> intKE = new List<string>();
-            List<StringAnalysis> SA = new List<StringAnalysis>();
-            List<WordAnalysis> WA = new List<WordAnalysis>();
-            int n_Words = 0;
-
-
-            for (int i = 0; i < keys.Count; i++)
-            {
-                if (Enum.GetNames(typeof(CarachterDelimitators)).Contains(keys[i]))
+                if (h.pertenceLimit(Newkeys[i]))
                 {
-                    if (intKE.Count == 0)
+                    if (pal.Length > 0)
                     {
-                        continue;
+                        if (Newkeys[i - 1].Equals("True"))
+                            palavras.Add(new Tuple<int, string, bool, int>(Newtime[i - 2] - timeI, pal.ToString(), backSp, comp));
+                        else
+                            palavras.Add(new Tuple<int, string, bool, int>(Newtime[i - 1] - timeI, pal.ToString(), backSp, comp));
+                        pal.Clear();
                     }
-                    StringBuilder sb = new StringBuilder();
-                    foreach (string k in intKE)
+
+                    backSp = false;
+                    comp = 0;
+
+                }
+                else
+                {
+                    if (Newkeys[i].Equals("True"))
                     {
-                        sb.Append(k);
-                    }
-                    n_Words++;
-                    SA.Add(new StringAnalysis(sb.ToString(),n_Words,corrected, i - intKE.Count, i, time.First(), time.Last()));
-                    Console.WriteLine(sb);
-                    corrected = false;
-                    intKE.Clear();
-                    int y = WA.FindIndex(n => n.word == sb.ToString());
-                    if (y > 0)
-                    {
-                        WA.Find(n => n.word == sb.ToString()).n_times++;
+                        backSp = true;
+                        // caso seje o ultimo True
+                        if (i == Newkeys.Count - 1 && pal.Length > 0)
+                        {
+
+                            palavras.Add(new Tuple<int, string, bool, int>(Newtime[i - 1] - timeI, pal.ToString(), backSp, comp));
+                        }
+
                     }
                     else
                     {
-                        WA.Add(new WordAnalysis(sb.ToString(), 1));
+                        if (pal.Length == 0)
+                            timeI = Newtime[i];
+                        pal.Append(Newkeys[i]);
+                        comp++;
+                        if (i == Newkeys.Count - 1 && pal.Length > 0)
+                        {
+                            palavras.Add(new Tuple<int, string, bool, int>(Newtime[i] - timeI, pal.ToString(), backSp, comp));
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+
+        public void PreProcPalavras(List<string> Newkeys, List<int> Newtime)
+        {
+            Hand h = new Hand();
+            int i = 0;
+            bool backsp = false;
+            for (i = 0; i < keys.Count; i++)
+            {
+
+                if (keys[i].Equals("Anterior") && Newkeys.Count > 0)
+                {
+                    backsp = true;
+                    if (Newkeys[Newkeys.Count - 1].Equals("True"))
+                    {
+                        Newkeys.RemoveAt(Newkeys.Count - 1);
+                        Newkeys.RemoveAt(Newkeys.Count - 1);
+                        Newtime.RemoveAt(Newtime.Count - 1);
+                        Newtime.RemoveAt(Newtime.Count - 1);
+                    }
+                    else
+                    {
+                        Newkeys.RemoveAt(Newkeys.Count - 1);
+                        Newtime.RemoveAt(Newtime.Count - 1);
                     }
                 }
                 else
                 {
-                    if (keys[i].Contains("Anterior"))
+                    if (h.pertenceLimit(keys[i]) && Newkeys.Count > 0 && backsp)
                     {
-                        if (intKE.Count != 0)
-                        {
-                            intKE.Remove(intKE.Last());
-                        }
-                        else if(intKE.Count == 0)
-                        {
-                            for (int y = SA.Last().firstKE; y < SA.Last().lastKE; y++)
-                            {
-                                intKE.Add(keys[y]);
-                            }
-                            SA.Remove(SA.Last());
-                            n_Words--;
-                        }
-                        corrected = true;
+
+                        Newkeys.Add("True");
+                        Newtime.Add(0);
+                        backsp = false;
+
+
                     }
-                    else
-                    {
-                        intKE.Add(keys[i]);
-                    }
+
+                    Newkeys.Add(keys[i]);
+                    Newtime.Add(time[i]);
+                }
+
+            }
+
+            if (Newkeys.Count > 0 && backsp)
+            {
+                Newkeys.Add("True");
+                Newtime.Add(0);
+            }
+
+
+
+        }
+
+
+        public void top10Palavras()
+        {
+            Dictionary<string, int> top = new Dictionary<string, int>();
+            foreach (Tuple<int, string, bool, int> t in palavras)
+            {
+                if (top.ContainsKey(t.Item2))
+                {
+                    top[t.Item2] += 1;
+                }
+                else
+                {
+                    top.Add(t.Item2, 1);
+                }
+
+            }
+            foreach (var item in top.OrderByDescending(r => r.Value).Take(10))
+            {
+                double valor = item.Value / (Convert.ToDouble(palavras.Count)) * 100;
+                db.insertDB("Insert into Words (Word, Percentagem,Top10_idTop10) values('" + item.Key + "'," + valor + "," + idTop10 + ");");
+
+                // Console.WriteLine("Key: {0}, Value: {1}", item.Key, item.Value / (Convert.ToDouble(palavras.Count)) * 100);
+            }
+        }
+
+        //percentagem de palavras em que encontrou o evento BackSpace durante a sua escrita
+        public void BackspacePalavra()
+        {
+            int count = 0;
+            foreach (Tuple<int, string, bool, int> t in palavras)
+            {
+                if (t.Item3)
+                {
+                    count++;
                 }
             }
-            return null;
+            db.insertDB("Insert into BackspacePalavra (Percentagem) values(" + (count / Convert.ToDouble(palavras.Count)) * 100 + ");");
+            id_BackSpacePalavra = db.getTableId("BackspacePalavra");
+            
         }
+
+
+        //Averiguar a percentagem de palavras com tamanho Y que foram corrigidas durante a sua escrita
+        public void BackspaceCorrigidas()
+        {
+            Dictionary<int, int> PalavrasCorrigidas = new Dictionary<int, int>();
+            Dictionary<int, double> PalvrasBackspaceTam = new Dictionary<int, double>();
+            foreach (Tuple<int, string, bool, int> t in palavras)
+            {
+                //Numero de palavras corrigidas por comprimento
+                if (PalavrasCorrigidas.ContainsKey(t.Item4)) {
+                    if (t.Item3) {
+                        PalavrasCorrigidas[t.Item4] += 1;
+                    }
+                }
+                else
+                {
+                    if (t.Item3)
+                    {
+                        PalavrasCorrigidas.Add(t.Item4, 1);
+                    }
+                }
+
+
+                //Numero de palavras de determinado comprimento
+                if (PalvrasBackspaceTam.ContainsKey(t.Item4))
+                {
+                    PalvrasBackspaceTam[t.Item4] += 1;
+                }
+                else
+                {
+                    PalvrasBackspaceTam.Add(t.Item4, 1);
+                }
+            }
+
+            var keys = new List<int>(PalavrasCorrigidas.Keys);
+
+            foreach (int key in keys)
+            {
+
+                PalvrasBackspaceTam[key] = (PalavrasCorrigidas[key] / Convert.ToDouble(PalvrasBackspaceTam[key])) * 100;
+                db.insertDB("Insert into BackspacesCorrigidas (Tamanho,Percentagem,Data_idData) values("+key+","+PalavrasCorrigidas[key]+","+idData+");");
+
+            }
+
+        }
+
+        public void LatenciaPalavras() {
+            double media = mediaWords();
+            double desvio = desvioWords();
+
+            db.insertDB("Insert into LatenciaPalavras (Media,Desvio_Padrao) values("+media+","+desvio+");");
+            id_LatenciaPalavras = db.getTableId("LatenciaPalavras");
+
+        }
+
+        public double mediaWords()
+        {
+            double soma = 0;
+
+            foreach (Tuple<int, string, bool, int> t in palavras)
+            {
+                soma += t.Item1;
+            }
+
+            return soma / palavras.Count;
+        }
+
+        public double desvioWords()
+        {
+            double media = mediaWords();
+            double soma = 0;
+            foreach (Tuple<int, string, bool, int> x in palavras)
+            {
+
+                soma += Math.Pow(x.Item1 - media, 2);
+
+            }
+            return Math.Sqrt(soma / (palavras.Count - 1));
+
+        }
+
+
+
+
+
+
+        public void mediaCompWord(Dictionary<int,double> mediaWordsTam)
+        {
+            Dictionary<int, int> n = new Dictionary<int, int>();
+            foreach (Tuple<int, string, bool, int> x in palavras)
+            {
+                if (mediaWordsTam.ContainsKey(x.Item4))
+                {
+                    mediaWordsTam[x.Item4] += x.Item1;
+                    n[x.Item4] += 1;
+                }
+                else
+                {
+                    mediaWordsTam.Add(x.Item4, x.Item1);
+                    n.Add(x.Item4, 1);
+                }
+
+            }
+            var keys = new List<int>(mediaWordsTam.Keys);
+
+            foreach (int key in keys)
+            {
+                mediaWordsTam[key] = mediaWordsTam[key] / n[key];
+
+            }
+
+        }
+
+
+
+        public void desvioMediaCompWords()
+        {
+            Dictionary<int, double> mediaWordsTam = new Dictionary<int, double>();
+            Dictionary<int, double> desvioWords = new Dictionary<int, double>();
+            Dictionary<int, int> n = new Dictionary<int, int>();
+
+            mediaCompWord(mediaWordsTam);
+
+            
+            foreach (Tuple<int, string, bool, int> x in palavras)
+            {
+                if (desvioWords.ContainsKey(x.Item4))
+                {
+                    desvioWords[x.Item4] += Math.Pow(x.Item1 - mediaWordsTam[x.Item4], 2);
+                    n[x.Item4] += 1;
+                }
+                else
+                {
+                    desvioWords.Add(x.Item4, Math.Pow(x.Item1 - mediaWordsTam[x.Item4], 2));
+                    n.Add(x.Item4, 1);
+                }
+
+            }
+            var keys = new List<int>(mediaWordsTam.Keys);
+
+            foreach (int key in keys)
+            {
+                desvioWords[key] = Math.Sqrt(desvioWords[key] / (n[key] - 1));
+                db.insertDB("insert into LatenciaTamanho(Tamnho,Media,Desvio_Padrao,Data_idData) values("+key+","+mediaWordsTam[key]+","+desvioWords[key]+","+idData+");");
+            }
+
+        }
+
+
+
+
+
     }
 }

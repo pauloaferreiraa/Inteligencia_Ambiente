@@ -95,6 +95,7 @@
     <Compile Include="ProcDados.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadData.cs" />
     <EmbeddedResource Include="AnaliseDigraph.resx">
       <DependentUpon>AnaliseDigraph.cs</DependentUpon>
     </EmbeddedResource>

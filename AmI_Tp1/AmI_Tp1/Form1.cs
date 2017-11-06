@@ -13,7 +13,8 @@ namespace AmI_Tp1
 {
     public partial class Form1 : Form
     {
-        
+        private string User;
+        private ReadData rd;
         ProcDados pD = new ProcDados();
         Database db = new Database("localhost","mydb","root","SLpaulO25");
         public Form1()
@@ -29,7 +30,8 @@ namespace AmI_Tp1
 
             if (result == DialogResult.OK) 
             {
-                
+                User = utilizador;
+                rd = new ReadData(User);
                 string file = openFileDialog1.FileName;
                 pD.init(utilizador,file,db);
                 MostraResult.Enabled = true;

@@ -46,6 +46,29 @@ namespace AmI_Tp1
             return reader;
         }
 
+        public int getTableId(string table)
+        {
+            string column_name = "id" + table;
+            string query = "select " + column_name + " from" + table + "order by idWritingTime desc limit 1;";
+            int id = 0;
+            MySqlDataReader reader = null;
+            try
+            {
+                command = new MySqlCommand(query, connection);
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    id = Convert.ToInt32(reader.GetString(0));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+
+            return id;
+        }
+
         public bool connect()
         {
             try

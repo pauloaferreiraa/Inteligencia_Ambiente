@@ -15,10 +15,11 @@ namespace AmI_Tp1
     {
         
         ProcDados pD = new ProcDados();
-
+        Database db = new Database("localhost","mydb","root","");
         public Form1()
         {
             InitializeComponent();
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -30,7 +31,7 @@ namespace AmI_Tp1
             {
                 
                 string file = openFileDialog1.FileName;
-                pD.init(utilizador,file);
+                pD.init(utilizador,file,db);
                 MostraResult.Enabled = true;
 
             }

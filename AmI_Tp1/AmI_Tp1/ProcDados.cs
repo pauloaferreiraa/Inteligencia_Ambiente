@@ -14,11 +14,11 @@ namespace AmI_Tp1
          List<Tuple<int, string, string, string>> dados = new List<Tuple<int, string, string, string>>();
 
 
-        public void init(string utilizador, string file) {
-
+        public void init(string utilizador, string file, Database db) {
+            db.connect();
             ler(file);
             constrHand();
-
+            
         }
 
 

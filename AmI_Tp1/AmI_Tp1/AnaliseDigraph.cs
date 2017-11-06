@@ -12,9 +12,19 @@ namespace AmI_Tp1
 {
     public partial class AnaliseDigraph : Form
     {
-        public AnaliseDigraph()
+        Form1 f1;
+        ProcDados pD;
+        public AnaliseDigraph(Form1 f1, ProcDados pD)
         {
+            this.pD = pD;
+            this.f1 = f1;
             InitializeComponent();
+            richTextBox1.Text = pD.DigraphAnalysis();
+        }
+
+        private void AnaliseDigraph_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

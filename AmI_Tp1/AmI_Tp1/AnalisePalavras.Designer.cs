@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(573, 280);
             this.Name = "AnalisePalavras";
             this.Text = "AnalisePalavras";
+            this.Load += new System.EventHandler(this.AnalisePalavras_Load);
             this.ResumeLayout(false);
 
         }

@@ -8,26 +8,29 @@ namespace AmI_Tp1
 {
     public class ProcDados
     {
-         List<int> time = new List<int>();
-         List<string> events = new List<string>();
-         List<string> keys = new List<string>();
-         List<Tuple<int, string, string, string>> dados = new List<Tuple<int, string, string, string>>();
-         Database db;
-         int id_BackspaceCaracter;
+        List<int> time = new List<int>();
+        List<string> events = new List<string>();
+        List<string> keys = new List<string>();
+        List<Tuple<int, string, string, string>> dados = new List<Tuple<int, string, string, string>>();
+        Database db;
+        int id_BackspaceCaracter;
         int idTop10;
-      
 
-        public void init(string utilizador, string file, Database db) {
+
+        public void init(string utilizador, string file, Database db)
+        {
             this.db = db;
             db.connect();
-            db.insertDB("Insert into Utilizador (Nome) select * from (select '"+utilizador+ "') as tmp WHERE NOT EXISTS (SELECT Nome FROM Utilizador WHERE Nome = '"+utilizador+"') LIMIT 1; ");
+            db.insertDB("Insert into Utilizador (Nome) select * from (select '" + utilizador +
+                        "') as tmp WHERE NOT EXISTS (SELECT Nome FROM Utilizador WHERE Nome = '" + utilizador +
+                        "') LIMIT 1; ");
             ler(file);
-            constrHand();            
+            constrHand();
         }
 
 
 
-        public void ler(string file) 
+        public void ler(string file)
         {
             String line;
             System.IO.StreamReader File = new System.IO.StreamReader(@file);
@@ -37,7 +40,6 @@ namespace AmI_Tp1
                 time.Add(Convert.ToInt32(substrings[0]));
                 events.Add(substrings[1]);
                 keys.Add(substrings[2]);
-                
             }
             File.Close();
         }
@@ -86,10 +88,10 @@ namespace AmI_Tp1
                 }
 
                 dados.Add(new Tuple<int, string, string, string>(x, keys[i], keys[i + 1], fst + "-" + snd));
-                
+
 
             }
-          
+
         }
 
 
@@ -104,8 +106,9 @@ namespace AmI_Tp1
                     count++;
                 }
             }
-            
-            db.insertDB("Insert into BackSpaceCaracter (Percentagem) values("+ (count / Convert.ToDouble(keys.Count)) * 100+");");
+
+            db.insertDB("Insert into BackSpaceCaracter (Percentagem) values(" +
+                        (count / Convert.ToDouble(keys.Count)) * 100 + ");");
             id_BackspaceCaracter = db.getTableId("BackspaceCaracter");
         }
 
@@ -126,21 +129,22 @@ namespace AmI_Tp1
 
             }
             //int line = 1;
-            
+
             foreach (var item in top.OrderByDescending(r => r.Value).Take(10))
             {
                 double valor = item.Value / (Convert.ToDouble(keys.Count)) * 100;
-                db.insertDB("Insert into Chars (Char, Percentagem,Top10) values("+item.Key+","+valor+","+ idTop10+");");
-               /* float valor = item.Value / (Convert.ToSingle(keys.Count)) * 100;
-                sb.Append(line.ToString("00"));
-                sb.Append("-  ");
-                sb.Append(item.Key);
-                sb.Append(' ', 15 - item.Key.Length);
-                sb.Append(valor.ToString()+"%");
-                sb.AppendLine();
-                line++;
-                */
-            }           
+                db.insertDB("Insert into Chars (Char, Percentagem,Top10) values(" + item.Key + "," + valor + "," +
+                            idTop10 + ");");
+                /* float valor = item.Value / (Convert.ToSingle(keys.Count)) * 100;
+                 sb.Append(line.ToString("00"));
+                 sb.Append("-  ");
+                 sb.Append(item.Key);
+                 sb.Append(' ', 15 - item.Key.Length);
+                 sb.Append(valor.ToString()+"%");
+                 sb.AppendLine();
+                 line++;
+                 */
+            }
             //return sb.ToString();
         }
 
@@ -314,25 +318,26 @@ namespace AmI_Tp1
             double StdDevSS = Math.Sqrt(somaDiffDaMediaSS / (countSS));
 
             return "Mean of the writing time of all Key Events: " + mediaAll +
-                     "\nStandard Deviation of the writing time of all Key Events:" + StdDev +
-                     "\nMean of the writing time of LL key groupings:" + mediaLL +
-                     "\nStandard Deviation of the writing time of LL key groupings:" + StdDevLL +
-                     "\nMean of the writing time of LR key groupings:" + mediaLR +
-                     "\nStandard Deviation of the writing time of LR key groupings:" + StdDevLR +
-                     "\nMean of the writing time of LS key groupings:" + mediaLS +
-                     "\nStandard Deviation of the writing time of LS key groupings:" + StdDevLS +
-                     "\nMean of the writing time of RL key groupings:" + mediaRL +
-                     "\nStandard Deviation of the writing time of RL key groupings:" + StdDevRL +
-                     "\nMean of the writing time of RR key groupings:" + mediaRR +
-                     "\nStandard Deviation of the writing time of RR key groupings:" + StdDevRR +
-                     "\nMean of the writing time of RS key groupings:" + mediaRS +
-                     "\nStandard Deviation of the writing time of RS key groupings:" + StdDevRS +
-                     "\nMean of the writing time of SL key groupings:" + mediaSL +
-                     "\nStandard Deviation of the writing time of SL key groupings:" + StdDevSL +
-                     "\nMean of the writing time of SR key groupings:" + mediaSR +
-                     "\nStandard Deviation of the writing time of SR key groupings:" + StdDevSR +
-                     "\nMean of the writing time of SS key groupings:" + mediaSS +
-                     "\nStandard Deviation of the writing time of SS key groupings:" + StdDevSS; ;
+                   "\nStandard Deviation of the writing time of all Key Events:" + StdDev +
+                   "\nMean of the writing time of LL key groupings:" + mediaLL +
+                   "\nStandard Deviation of the writing time of LL key groupings:" + StdDevLL +
+                   "\nMean of the writing time of LR key groupings:" + mediaLR +
+                   "\nStandard Deviation of the writing time of LR key groupings:" + StdDevLR +
+                   "\nMean of the writing time of LS key groupings:" + mediaLS +
+                   "\nStandard Deviation of the writing time of LS key groupings:" + StdDevLS +
+                   "\nMean of the writing time of RL key groupings:" + mediaRL +
+                   "\nStandard Deviation of the writing time of RL key groupings:" + StdDevRL +
+                   "\nMean of the writing time of RR key groupings:" + mediaRR +
+                   "\nStandard Deviation of the writing time of RR key groupings:" + StdDevRR +
+                   "\nMean of the writing time of RS key groupings:" + mediaRS +
+                   "\nStandard Deviation of the writing time of RS key groupings:" + StdDevRS +
+                   "\nMean of the writing time of SL key groupings:" + mediaSL +
+                   "\nStandard Deviation of the writing time of SL key groupings:" + StdDevSL +
+                   "\nMean of the writing time of SR key groupings:" + mediaSR +
+                   "\nStandard Deviation of the writing time of SR key groupings:" + StdDevSR +
+                   "\nMean of the writing time of SS key groupings:" + mediaSS +
+                   "\nStandard Deviation of the writing time of SS key groupings:" + StdDevSS;
+            ;
         }
 
 
@@ -351,13 +356,104 @@ namespace AmI_Tp1
         //Analise de palavras
 
 
+        class StringAnalysis
+        {
+            public string word;
+            public int ordem;
+            public bool corrected;
+            public int firstKE;
+            public int lastKE;
+            public int initTime;
+            public int endTime;
+
+            public StringAnalysis(string w, int ord, bool corr, int fKE, int lKE, int iT, int eT)
+            {
+                word = w;
+                ordem = ord;
+                corrected = corr;
+                firstKE = fKE;
+                lastKE = lKE;
+                initTime = iT;
+                endTime = eT;
+            }
+        }
+
+        class WordAnalysis
+        {
+            public string word;
+            public int n_times = 0;
+
+            public WordAnalysis(string w, int n_t)
+            {
+                word = w;
+                n_times = n_t;
+            }
+        }
+
+        enum CarachterDelimitators { Space, Oemcomma, OemPeriod, OemMinus }
+        public string AnalisePalavras() //todo Fazer analise completa das palavras
+        {
+            bool corrected = false;
+            List<string> intKE = new List<string>();
+            List<StringAnalysis> SA = new List<StringAnalysis>();
+            List<WordAnalysis> WA = new List<WordAnalysis>();
+            int n_Words = 0;
 
 
- 
-
-
-
-
-
+            for (int i = 0; i < keys.Count; i++)
+            {
+                if (Enum.GetNames(typeof(CarachterDelimitators)).Contains(keys[i]))
+                {
+                    if (intKE.Count == 0)
+                    {
+                        continue;
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    foreach (string k in intKE)
+                    {
+                        sb.Append(k);
+                    }
+                    n_Words++;
+                    SA.Add(new StringAnalysis(sb.ToString(),n_Words,corrected, i - intKE.Count, i, time.First(), time.Last()));
+                    Console.WriteLine(sb);
+                    corrected = false;
+                    intKE.Clear();
+                    int y = WA.FindIndex(n => n.word == sb.ToString());
+                    if (y > 0)
+                    {
+                        WA.Find(n => n.word == sb.ToString()).n_times++;
+                    }
+                    else
+                    {
+                        WA.Add(new WordAnalysis(sb.ToString(), 1));
+                    }
+                }
+                else
+                {
+                    if (keys[i].Contains("Anterior"))
+                    {
+                        if (intKE.Count != 0)
+                        {
+                            intKE.Remove(intKE.Last());
+                        }
+                        else if(intKE.Count == 0)
+                        {
+                            for (int y = SA.Last().firstKE; y < SA.Last().lastKE; y++)
+                            {
+                                intKE.Add(keys[y]);
+                            }
+                            SA.Remove(SA.Last());
+                            n_Words--;
+                        }
+                        corrected = true;
+                    }
+                    else
+                    {
+                        intKE.Add(keys[i]);
+                    }
+                }
+            }
+            return null;
+        }
     }
 }

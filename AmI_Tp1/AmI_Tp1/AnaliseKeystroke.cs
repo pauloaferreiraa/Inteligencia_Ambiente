@@ -26,6 +26,9 @@ namespace AmI_Tp1
             //BackSpaceKey.Text = pD.nBackSpaces().ToString()+"%";
         }
 
-       
+        private void AnaliseKeystroke_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

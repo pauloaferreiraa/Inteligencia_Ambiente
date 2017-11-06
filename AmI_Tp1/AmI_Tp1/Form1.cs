@@ -50,13 +50,13 @@ namespace AmI_Tp1
             //Analise de eventos Digraph
             if (VerResult.Text.Equals("Análise de eventos Digraph"))
             {
-                AnaliseDigraph aD = new AnaliseDigraph();
+                AnaliseDigraph aD = new AnaliseDigraph(this, pD);
                 aD.Show();
             }
             //Analise de eventos de Palavras
             if (VerResult.Text.Equals("Análise de eventos de Palavras"))
             {
-                AnalisePalavras aP = new AnalisePalavras();
+                AnalisePalavras aP = new AnalisePalavras(this, pD);
                 aP.Show();
             }
         }

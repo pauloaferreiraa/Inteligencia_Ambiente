@@ -73,7 +73,7 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Top 10\r\n     Caracter       Valor\r\n";
             // 
-            // Form2
+            // AnaliseKeystroke
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -82,8 +82,9 @@
             this.Controls.Add(this.labelBackSpace);
             this.Controls.Add(this.BackSpaceKey);
             this.Controls.Add(this.showTop10);
-            this.Name = "Form2";
+            this.Name = "AnaliseKeystroke";
             this.Text = "Form2";
+            this.Load += new System.EventHandler(this.AnaliseKeystroke_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

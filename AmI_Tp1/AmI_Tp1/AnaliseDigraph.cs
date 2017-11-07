@@ -12,17 +12,23 @@ namespace AmI_Tp1
 {
     public partial class AnaliseDigraph : Form
     {
-        public AnaliseDigraph()
+        ReadData rd;
+        string utilizador;
+
+        public AnaliseDigraph(ReadData rd,string utilizador)
         {
-            
+            this.rd = rd;
+            this.utilizador = utilizador;
             
             InitializeComponent();
-            //richTextBox1.Text = pD.DigraphAnalysis();
+            //digraphTB.Text = rd.
+            string st = rd.writingTime(utilizador);
+            string[] split = st.Split(' ');
+            string media = split[0];
+            string dp = split[1];
+            writingTimeMediaTB.Text = media;
+            writingTimeDPTB.Text = dp;
         }
-
-        private void AnaliseDigraph_Load(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 }

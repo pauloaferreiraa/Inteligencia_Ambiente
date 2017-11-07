@@ -87,6 +87,23 @@ namespace AmI_Tp1
             }
             reader.Close();
             return valor;
-        } 
+        }
+        
+        public string writingTime(string utilizador)
+        {
+            int idData = getIdData();
+            string query = "select Media,Desvio_Padrao from writingtime " +
+                "inner join data on(data.WritingTime_idWritingTime = writingtime.idWritingTime) " +
+                "inner join utilizador on(data.Utilizador = Nome) " +
+                "where utilizador = '" + utilizador+ "' && data.idData = "+ idData + ";";
+            MySqlDataReader reader = db.getResultsDB(query);
+            string valor = "";
+            while (reader.Read())
+            {
+                valor = reader.GetString(0) + " " + reader.GetString(1);
+            }
+            reader.Close();
+            return valor;
+        }
     }
 }

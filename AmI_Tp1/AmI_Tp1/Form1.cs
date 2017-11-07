@@ -53,7 +53,7 @@ namespace AmI_Tp1
             //Analise de eventos Digraph
             if (VerResult.Text.Equals("Análise de eventos Digraph"))
             {
-                AnaliseDigraph aD = new AnaliseDigraph();
+                AnaliseDigraph aD = new AnaliseDigraph(rd,User);
                 aD.Show();
             }
             //Analise de eventos de Palavras

@@ -37,7 +37,7 @@ namespace AmI_Tp1
         public void init(string utilizador, string file, Database db) {
             this.db = db;
             this.utilizador = utilizador;
-            db.connect();
+           
             db.insertDB("Insert into Utilizador (Nome) select* from (select '"+utilizador+ "') as tmp WHERE NOT EXISTS (SELECT Nome FROM Utilizador WHERE Nome = '"+utilizador+"') LIMIT 1; ");
 
             ler(file);
@@ -54,6 +54,7 @@ namespace AmI_Tp1
             top10Keystrokes();
             top10Palavras();
             BackspaceCorrigidas();
+            
         }
 
 
@@ -335,6 +336,7 @@ namespace AmI_Tp1
                 }
             }
 
+
             double StdDev = Math.Sqrt(somaDiffDaMediaAll / (dados.Count));
             double StdDevLL = Math.Sqrt(somaDiffDaMediaLL / (countLL));
             double StdDevLR = Math.Sqrt(somaDiffDaMediaLR / (countLR));
@@ -346,8 +348,18 @@ namespace AmI_Tp1
             double StdDevSR = Math.Sqrt(somaDiffDaMediaSR / (countSR));
             double StdDevSS = Math.Sqrt(somaDiffDaMediaSS / (countSS));
 
+            if (Double.IsNaN(StdDev)) { StdDev = 0; }
+            if (Double.IsNaN(StdDevLL)) { StdDevLL = 0; }
+            if (Double.IsNaN(StdDevLR)) { StdDevLR = 0; }
+            if (Double.IsNaN(StdDevLS)) { StdDevLS = 0; }
+            if (Double.IsNaN(StdDevRL)) { StdDevRL = 0; }
+            if (Double.IsNaN(StdDevRR)) { StdDevRR = 0; }
+            if (Double.IsNaN(StdDevRS)) { StdDevRS = 0; }
+            if (Double.IsNaN(StdDevSL)) { StdDevSL = 0; }
+            if (Double.IsNaN(StdDevSR)) { StdDevSR = 0; }
+            if (Double.IsNaN(StdDevSS)) { StdDevSS = 0; }
 
-            db.insertDB("Insert into WritingTime (Media,Desvio_Padrao) values("+mediaAll+","+StdDev+");");
+            db.insertDB("Insert into WritingTime (Media,Desvio_Padrao) values("+mediaAll.ToString().Replace(',','.')+","+StdDev.ToString().Replace(',', '.') + ");");
             idWrittingTime = db.getTableId("WritingTime");
             Data();
             db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('LL',"+mediaLL.ToString().Replace(',','.')+
@@ -717,6 +729,7 @@ namespace AmI_Tp1
             foreach (int key in keys)
             {
                 desvioWords[key] = Math.Sqrt(desvioWords[key] / (n[key] - 1));
+                if (Double.IsNaN(desvioWords[key])) { desvioWords[key] = 0; }
                 db.insertDB("insert into LatenciaTamanho(Tamanho,Media,Desvio_Padrao,Data_idData) values("+key+","+
                     mediaWordsTam[key].ToString().Replace(',', '.') + ","+desvioWords[key].ToString().Replace(',', '.') + ","+idData+");");
             }

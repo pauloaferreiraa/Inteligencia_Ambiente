@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,35 @@ namespace AmI_Tp1
     {
         private string utilizador;
 
-        public ReadData(string utilizador)
+        public ReadData(string utilizador,MySqlConnection connection)
         {
             this.utilizador = utilizador;
+        }
+
+        //id da data mais recente
+        public int getIdData()
+        {
+            int id = 0;
+
+            string query = "select idData from data order by Data desc limit 1;";
+
+            MySqlDataReader reader = null;
+            try
+            {
+                command = new MySqlCommand(query, connection);
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    id = Convert.ToInt32(reader.GetString(0));
+                }
+                reader.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
+            return id;
         }
 
         public string readTop10()

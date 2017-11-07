@@ -19,6 +19,7 @@ namespace AmI_Tp1
         Database db = new Database("localhost","mydb","root","SLpaulO25");
         public Form1()
         {
+            db.connect();
             InitializeComponent();
             
         }

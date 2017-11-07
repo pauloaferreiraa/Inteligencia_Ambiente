@@ -21,6 +21,7 @@ namespace AmI_Tp1
             InitializeComponent();
             showTopWords10TB.Text = rd.top10Words(utilizador);
             backspaceCorrigidasTB.Text = rd.backspaceCorrigidas(utilizador);
+            BackSpaceKeyTB.Text = rd.backspacePalavras(utilizador);
             string med_dp = rd.latenciaPal(utilizador);
             string[] spl = med_dp.Split(' ');
             latenciaPalMediaTB.Text = spl[0];

@@ -21,7 +21,7 @@ namespace AmI_Tp1
             this.utilizador = utilizador;
             
             InitializeComponent();
-            //digraphTB.Text = rd.
+            digraphTB.Text = rd.groupAnalysis(utilizador);
             string st = rd.writingTime(utilizador);
             string[] split = st.Split(' ');
             string media = split[0];

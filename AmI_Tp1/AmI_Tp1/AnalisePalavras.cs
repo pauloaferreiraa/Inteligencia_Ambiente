@@ -12,17 +12,20 @@ namespace AmI_Tp1
 {
     public partial class AnalisePalavras : Form
     {
-        
-        public AnalisePalavras()
+        ReadData rd;
+        string utilizador;
+        public AnalisePalavras(ReadData rd, string utilizador)
         {
-   
+            this.rd = rd;
+            this.utilizador = utilizador;
             InitializeComponent();
-            //string ds = pD.AnalisePalavras();
-        }
-
-        private void AnalisePalavras_Load(object sender, EventArgs e)
-        {
-
+            showTopWords10TB.Text = rd.top10Words(utilizador);
+            backspaceCorrigidasTB.Text = rd.backspaceCorrigidas(utilizador);
+            string med_dp = rd.latenciaPal(utilizador);
+            string[] spl = med_dp.Split(' ');
+            latenciaPalMediaTB.Text = spl[0];
+            latenciaPalDPTB.Text = spl[1];
+            latenciaTamTB.Text = rd.latenciaTamanho(utilizador);
         }
     }
 }

@@ -35,6 +35,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.writingTimeMediaTB = new System.Windows.Forms.RichTextBox();
             this.writingTimeDPTB = new System.Windows.Forms.RichTextBox();
+            this.HandGroup = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // digraphTB
@@ -103,11 +106,41 @@
             this.writingTimeDPTB.TabIndex = 8;
             this.writingTimeDPTB.Text = "";
             // 
+            // HandGroup
+            // 
+            this.HandGroup.AutoSize = true;
+            this.HandGroup.Location = new System.Drawing.Point(21, 64);
+            this.HandGroup.Name = "HandGroup";
+            this.HandGroup.Size = new System.Drawing.Size(62, 13);
+            this.HandGroup.TabIndex = 9;
+            this.HandGroup.Text = "HandGroup";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(113, 71);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(36, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Media";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(188, 71);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(74, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "DesvioPadrao";
+            // 
             // AnaliseDigraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(791, 442);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.HandGroup);
             this.Controls.Add(this.writingTimeDPTB);
             this.Controls.Add(this.writingTimeMediaTB);
             this.Controls.Add(this.label4);
@@ -131,5 +164,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RichTextBox writingTimeMediaTB;
         private System.Windows.Forms.RichTextBox writingTimeDPTB;
+        private System.Windows.Forms.Label HandGroup;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
     }
 }

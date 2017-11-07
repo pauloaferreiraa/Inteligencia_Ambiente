@@ -59,7 +59,7 @@ namespace AmI_Tp1
             //Analise de eventos de Palavras
             if (VerResult.Text.Equals("Análise de eventos de Palavras"))
             {
-                AnalisePalavras aP = new AnalisePalavras();
+                AnalisePalavras aP = new AnalisePalavras(rd,User);
                 aP.Show();
             }
         }

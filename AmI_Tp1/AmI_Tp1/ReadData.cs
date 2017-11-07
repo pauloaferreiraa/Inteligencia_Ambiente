@@ -105,5 +105,110 @@ namespace AmI_Tp1
             reader.Close();
             return valor;
         }
+
+        public string groupAnalysis(string utilizador)
+        {
+            int idData = getIdData();
+            string query = "select HandGroup,Media,Desvio_Padrao from groupanalysis " +
+                "inner join data on(groupanalysis.Data_idData = data.idData) " +
+                "inner join utilizador on(data.Utilizador = Nome) " +
+                "where utilizador = '" + utilizador + "' && idData = " + idData + ";";
+
+            MySqlDataReader reader = db.getResultsDB(query);
+            StringBuilder sb = new StringBuilder();
+            while (reader.Read())
+            {
+                sb.Append(reader.GetString(0)).Append(" ").Append(reader.GetString(1)).Append(" ").
+                    Append(reader.GetString(2)).AppendLine();
+            }
+            reader.Close();
+            return sb.ToString();
+        }
+
+        public string top10Words(string utilizador)
+        {
+            int idData = getIdData();
+            string query = "select Word,Percentagem from data inner join utilizador on (data.Utilizador = utilizador.Nome) " +
+                "inner join top10 on (data.idData = top10.IdData) " +
+                "inner join words on (top10.idTop10 = words.Top10_idTop10) " +
+                "where utilizador = '" + utilizador + "' && data.idData = " + idData + " order by Percentagem desc;";
+            MySqlDataReader reader = db.getResultsDB(query);
+            StringBuilder sb = new StringBuilder();
+            while (reader.Read())
+            {
+                sb.Append(reader.GetString(0)).Append(" ").Append(reader.GetString(1)).Append(" ").AppendLine();
+            }
+            reader.Close();
+            return sb.ToString();
+        }
+
+        public string backspacePalavras(string utilizador)
+        {
+            int idData = getIdData();
+            string query = "select Percentagem from " +
+                "data inner join utilizador on (data.Utilizador = utilizador.Nome) " +
+                "inner join backspacepalavra on (idBackspace = data.Backspace_idBackspace) " +
+                "where utilizador = '" + utilizador + "' && data.idData = " + idData + ";";
+            MySqlDataReader reader = db.getResultsDB(query);
+            string valor = "";
+            while (reader.Read())
+            {
+                valor = reader.GetString(0);
+            }
+            reader.Close();
+            return valor;
+        }
+
+        public string backspaceCorrigidas(string utilizador)
+        {
+            int idData = getIdData();
+            string query = "select Tamanho,Percentagem from backspacescorrigidas " +
+                "inner join data on (backspacescorrigidas.Data_idData = data.idData) " +
+                "inner join utilizador on (data.Utilizador = Nome) " +
+                "where utilizador = '" + utilizador + "' && data.idData = " + idData + " order by Tamanho;";
+            MySqlDataReader reader = db.getResultsDB(query);
+            StringBuilder sb = new StringBuilder();
+            while (reader.Read())
+            {
+                sb.Append(reader.GetString(0)).Append(" ").Append(reader.GetString(1)).Append(" ").AppendLine("%");
+            }
+            reader.Close();
+            return sb.ToString();
+        }
+
+        public string latenciaPal(string utilizador)
+        {
+            int idData = getIdData();
+            string query = "select Media,Desvio_Padrao from " +
+                "data inner join utilizador on (data.Utilizador = utilizador.Nome) " +
+                "inner join latenciapalavras on (idLatenciaPalavras = data.LatenciaPalavras_idLatenciaPalavras)" +
+                "where utilizador = '" + utilizador + "' && data.idData = " + idData + ";";
+            MySqlDataReader reader = db.getResultsDB(query);
+            string valor = "";
+            while (reader.Read())
+            {
+                valor = reader.GetString(0) + " " + reader.GetString(1);
+            }
+            reader.Close();
+            return valor;
+        }
+
+        public string latenciaTamanho(string utilizador)
+        {
+            int idData = getIdData();
+            string query = "select Tamanho,Media,Desvio_Padrao " +
+                "from latenciatamanho inner join data on (latenciatamanho.Data_idData = data.idData) " +
+                "inner join utilizador on (data.Utilizador = Nome) " +
+                "where utilizador = '" + utilizador + "' && data.idData = " + idData + ";";
+            MySqlDataReader reader = db.getResultsDB(query);
+            StringBuilder sb = new StringBuilder();
+            while (reader.Read())
+            {
+                sb.Append(reader.GetString(0)).Append(" ").Append(reader.GetString(1)).Append(" ").
+                    Append(reader.GetString(2)).AppendLine();
+            }
+            reader.Close();
+            return sb.ToString();
+        }
     }
 }

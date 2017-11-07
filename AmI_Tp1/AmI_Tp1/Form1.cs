@@ -32,7 +32,7 @@ namespace AmI_Tp1
             if (result == DialogResult.OK) 
             {
                 User = utilizador;
-                rd = new ReadData(User);
+                rd = new ReadData(User,db);
                 string file = openFileDialog1.FileName;
                 pD.init(utilizador,file,db);
                 MostraResult.Enabled = true;

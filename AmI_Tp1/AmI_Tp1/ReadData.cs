@@ -10,10 +10,12 @@ namespace AmI_Tp1
     public class ReadData
     {
         private string utilizador;
+        private Database db;
 
-        public ReadData(string utilizador,MySqlConnection connection)
+        public ReadData(string utilizador,Database db)
         {
             this.utilizador = utilizador;
+            this.db = db;
         }
 
         //id da data mais recente
@@ -26,8 +28,7 @@ namespace AmI_Tp1
             MySqlDataReader reader = null;
             try
             {
-                command = new MySqlCommand(query, connection);
-                reader = command.ExecuteReader();
+                reader = db.getResultsDB(query);
                 while (reader.Read())
                 {
                     id = Convert.ToInt32(reader.GetString(0));
@@ -38,7 +39,7 @@ namespace AmI_Tp1
             {
                 Console.WriteLine(e.ToString());
             }
-
+            Console.WriteLine(id);
             return id;
         }
 

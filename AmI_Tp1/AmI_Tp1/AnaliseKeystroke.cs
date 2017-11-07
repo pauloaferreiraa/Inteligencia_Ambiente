@@ -13,17 +13,17 @@ namespace AmI_Tp1
 {
     public partial class AnaliseKeystroke : Form
     {
-        
-        Form1 f1;
-        ProcDados pD;
-        public AnaliseKeystroke(Form1 f1,ProcDados pD)
+
+        ReadData rd;
+        string utilizador;
+
+        public AnaliseKeystroke(ReadData rd, string utilizador)
         {
-            this.pD = pD;
-            this.f1 = f1;
+            this.rd = rd;
             InitializeComponent();
-           
-            //showTop10.Text = pD.top10Keystrokes();
-            //BackSpaceKey.Text = pD.nBackSpaces().ToString()+"%";
+            this.utilizador = utilizador;
+            showTop10.Text = rd.readTop10KeyStrokes(utilizador);
+            BackSpaceKey.Text = rd.backspaceCaracter(utilizador) + "%";
         }
 
         private void AnaliseKeystroke_Load(object sender, EventArgs e)

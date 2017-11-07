@@ -39,17 +39,54 @@ namespace AmI_Tp1
             {
                 Console.WriteLine(e.ToString());
             }
-            Console.WriteLine(id);
+            
             return id;
         }
 
-        public string readTop10()
+        public string readTop10KeyStrokes(string utilizador)
         {
             StringBuilder sb = new StringBuilder();
+            int idDataRecente = getIdData();
 
+            string query = "select Caracter, Percentagem from data " +
+                "inner join utilizador on (data.Utilizador = utilizador.Nome) inner join top10 on (data.idData = top10.IdData) " +
+                "inner join chars on  (top10.idTop10 = chars.Top10)" +
+                "where utilizador = '" + utilizador + "' && data.idData = "
+                 + idDataRecente + " order by Percentagem desc;";
+            MySqlDataReader reader = db.getResultsDB(query);
+            int line = 1;
+            while (reader.Read())
+            {
+                string caracter = reader.GetString(0);
+                string perc = reader.GetString(1);
+                sb.Append(line.ToString("00"));
+                sb.Append("-  ");
                 
-
+                sb.Append(caracter);
+                sb.Append(' ', 15 - caracter.Length);
+                sb.Append(perc).Append("%");
+                sb.AppendLine();
+                line++;
+            }
+            reader.Close();
             return sb.ToString();
         }
+
+        public string backspaceCaracter(string utilizador)
+        {
+            int idData = getIdData();
+            string valor = "";
+            string query = "select Percentagem from " +
+                "data inner join utilizador on(data.Utilizador = utilizador.Nome) " +
+                "inner join backspacecaracter on(idBackspace = data.Backspace_idBackspace) " +
+                "where utilizador = + '" + utilizador + "' && data.idData = " + idData + ";";
+            MySqlDataReader reader = db.getResultsDB(query);
+            while (reader.Read())
+            {
+                valor = reader.GetString(0);
+            }
+            reader.Close();
+            return valor;
+        } 
     }
 }

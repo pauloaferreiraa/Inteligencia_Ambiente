@@ -15,7 +15,6 @@ namespace AmI_Tp1
     {
         private string User;
         private ReadData rd;
-        ProcDados pD = new ProcDados();
         Database db = new Database("localhost","mydb","root","SLpaulO25");
         public Form1()
         {
@@ -26,6 +25,7 @@ namespace AmI_Tp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ProcDados pd = new ProcDados();
             string utilizador = textBoxUt.Text;
             DialogResult result = openFileDialog1.ShowDialog();
 
@@ -34,7 +34,7 @@ namespace AmI_Tp1
                 User = utilizador;
                 rd = new ReadData(User,db);
                 string file = openFileDialog1.FileName;
-                pD.init(utilizador,file,db);
+                pd.init(utilizador,file,db);
                 MostraResult.Enabled = true;
 
             }
@@ -47,19 +47,19 @@ namespace AmI_Tp1
             //Analise de eventos Keystroke
             if (VerResult.Text.Equals("Análise de eventos Keystroke"))
             {
-                AnaliseKeystroke aKStroke = new AnaliseKeystroke(this, pD);
+                AnaliseKeystroke aKStroke = new AnaliseKeystroke(rd,User);
                 aKStroke.Show();
             }
             //Analise de eventos Digraph
             if (VerResult.Text.Equals("Análise de eventos Digraph"))
             {
-                AnaliseDigraph aD = new AnaliseDigraph(this, pD);
+                AnaliseDigraph aD = new AnaliseDigraph();
                 aD.Show();
             }
             //Analise de eventos de Palavras
             if (VerResult.Text.Equals("Análise de eventos de Palavras"))
             {
-                AnalisePalavras aP = new AnalisePalavras(this, pD);
+                AnalisePalavras aP = new AnalisePalavras();
                 aP.Show();
             }
         }

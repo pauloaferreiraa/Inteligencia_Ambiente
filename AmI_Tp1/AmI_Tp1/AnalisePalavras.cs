@@ -12,12 +12,10 @@ namespace AmI_Tp1
 {
     public partial class AnalisePalavras : Form
     {
-        Form1 f1;
-        ProcDados pD;
-        public AnalisePalavras(Form1 f1, ProcDados pD)
+        
+        public AnalisePalavras()
         {
-            this.pD = pD;
-            this.f1 = f1;
+   
             InitializeComponent();
             //string ds = pD.AnalisePalavras();
         }

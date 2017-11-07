@@ -44,7 +44,7 @@ namespace AmI_Tp1
             catch (Exception e)
             {
                 
-                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.Message);
             }
             return reader;
         }

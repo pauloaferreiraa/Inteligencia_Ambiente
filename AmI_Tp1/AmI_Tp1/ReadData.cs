@@ -12,7 +12,7 @@ namespace AmI_Tp1
         private string utilizador;
         private Database db;
 
-        public ReadData(string utilizador,Database db)
+        public ReadData(string utilizador,Database db) //UPTODATE
         {
             this.utilizador = utilizador;
             this.db = db;

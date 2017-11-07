@@ -19,7 +19,7 @@ namespace AmI_Tp1
             this.pD = pD;
             this.f1 = f1;
             InitializeComponent();
-            string ds = pD.AnalisePalavras();
+            //string ds = pD.AnalisePalavras();
         }
 
         private void AnalisePalavras_Load(object sender, EventArgs e)

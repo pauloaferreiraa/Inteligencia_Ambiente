@@ -19,7 +19,7 @@ namespace AmI_Tp1
             this.pD = pD;
             this.f1 = f1;
             InitializeComponent();
-            richTextBox1.Text = pD.DigraphAnalysis();
+            //richTextBox1.Text = pD.DigraphAnalysis();
         }
 
         private void AnaliseDigraph_Load(object sender, EventArgs e)

@@ -49,10 +49,11 @@ namespace AmI_Tp1
             LatenciaPalavras();
             DigraphAnalysis();
             desvioMediaCompWords();
-            BackspaceCorrigidas();
+            
             Top10();
             top10Keystrokes();
             top10Palavras();
+            BackspaceCorrigidas();
         }
 
 
@@ -134,8 +135,9 @@ namespace AmI_Tp1
                     count++;
                 }
             }
-            
-            db.insertDB("Insert into BackSpaceCaracter (Percentagem) values("+ (count / Convert.ToDouble(keys.Count)) * 100+");");
+            double valor = (count / Convert.ToDouble(keys.Count)) * 100;
+            string val = valor.ToString().Replace(',', '.');
+            db.insertDB("Insert into BackSpaceCaracter (Percentagem) values("+ val +");");
             id_BackspaceCaracter = db.getTableId("BackspaceCaracter");
         }
 
@@ -160,7 +162,8 @@ namespace AmI_Tp1
             foreach (var item in top.OrderByDescending(r => r.Value).Take(10))
             {
                 double valor = item.Value / (Convert.ToDouble(keys.Count)) * 100;
-                db.insertDB("Insert into Chars (Char, Percentagem,Top10) values('"+item.Key+"',"+valor+","+ idTop10+");");
+                string val = valor.ToString().Replace(',', '.');
+                db.insertDB("Insert into Chars (Caracter, Percentagem,Top10) values('"+item.Key+"',"+val+","+ idTop10+");");
                /* float valor = item.Value / (Convert.ToSingle(keys.Count)) * 100;
                 sb.Append(line.ToString("00"));
                 sb.Append("-  ");
@@ -347,15 +350,24 @@ namespace AmI_Tp1
             db.insertDB("Insert into WritingTime (Media,Desvio_Padrao) values("+mediaAll+","+StdDev+");");
             idWrittingTime = db.getTableId("WritingTime");
             Data();
-            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('LL',"+mediaLL+","+idData+","+StdDevLL+");");
-            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('LR'," + mediaLR + "," + idData + "," + StdDevLR + ");");
-            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('LS'," + mediaLS + "," + idData + "," + StdDevLS + ");");
-            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('RL'," + mediaRL + "," + idData + "," + StdDevRL + ");");
-            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('RR'," + mediaRR + "," + idData + "," + StdDevRR + ");");
-            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('RS'," + mediaRS + "," + idData + "," + StdDevRS + ");");
-            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('SL'," + mediaSL + "," + idData + "," + StdDevSL + ");");
-            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('SR'," + mediaSR + "," + idData + "," + StdDevSR + ");");
-            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('SS'," + mediaSS + "," + idData + "," + StdDevSS + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('LL',"+mediaLL.ToString().Replace(',','.')+
+                ","+idData+","+StdDevLL.ToString().Replace(',', '.') + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('LR'," + mediaLR.ToString().Replace(',', '.') + 
+                "," + idData + "," + StdDevLR.ToString().Replace(',', '.') + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('LS'," + mediaLS.ToString().Replace(',', '.') + 
+                "," + idData + "," + StdDevLS.ToString().Replace(',', '.') + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('RL'," + mediaRL.ToString().Replace(',', '.') + 
+                "," + idData + "," + StdDevRL.ToString().Replace(',', '.') + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('RR'," + mediaRR.ToString().Replace(',', '.') + 
+                "," + idData + "," + StdDevRR.ToString().Replace(',', '.') + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('RS'," + mediaRS.ToString().Replace(',', '.') + 
+                "," + idData + "," + StdDevRS.ToString().Replace(',', '.') + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('SL'," + mediaSL.ToString().Replace(',', '.') + 
+                "," + idData + "," + StdDevSL.ToString().Replace(',', '.') + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('SR'," + mediaSR.ToString().Replace(',', '.') + 
+                "," + idData + "," + StdDevSR.ToString().Replace(',', '.') + ");");
+            db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('SS'," + mediaSS.ToString().Replace(',', '.') + 
+                "," + idData + "," + StdDevSS.ToString().Replace(',', '.') + ");");
             /* return "Mean of the writing time of all Key Events: " + mediaAll +
                       "\nStandard Deviation of the writing time of all Key Events:" + StdDev +
                       "\nMean of the writing time of LL key groupings:" + mediaLL +
@@ -537,7 +549,8 @@ namespace AmI_Tp1
             foreach (var item in top.OrderByDescending(r => r.Value).Take(10))
             {
                 double valor = item.Value / (Convert.ToDouble(palavras.Count)) * 100;
-                db.insertDB("Insert into Words (Word, Percentagem,Top10_idTop10) values('" + item.Key + "'," + valor + "," + idTop10 + ");");
+                string val = valor.ToString().Replace(',', '.');
+                db.insertDB("Insert into Words (Word, Percentagem,Top10_idTop10) values('" + item.Key + "'," + val + "," + idTop10 + ");");
 
                 // Console.WriteLine("Key: {0}, Value: {1}", item.Key, item.Value / (Convert.ToDouble(palavras.Count)) * 100);
             }
@@ -554,7 +567,9 @@ namespace AmI_Tp1
                     count++;
                 }
             }
-            db.insertDB("Insert into BackspacePalavra (Percentagem) values(" + (count / Convert.ToDouble(palavras.Count)) * 100 + ");");
+            double valor = (count / Convert.ToDouble(palavras.Count)) * 100;
+            string val = valor.ToString().Replace(',', '.');
+            db.insertDB("Insert into BackspacePalavra (Percentagem) values(" + val + ");");
             id_BackSpacePalavra = db.getTableId("BackspacePalavra");
             
         }
@@ -599,7 +614,7 @@ namespace AmI_Tp1
             {
 
                 PalvrasBackspaceTam[key] = (PalavrasCorrigidas[key] / Convert.ToDouble(PalvrasBackspaceTam[key])) * 100;
-                db.insertDB("Insert into BackspacesCorrigidas (Tamanho,Percentagem,Data_idData) values("+key+","+PalavrasCorrigidas[key]+","+idData+");");
+                db.insertDB("Insert into BackspacesCorrigidas (Tamanho,Percentagem,Data_idData) values("+key+","+PalavrasCorrigidas[key].ToString().Replace(',','.')+","+idData+");");
 
             }
 
@@ -609,7 +624,7 @@ namespace AmI_Tp1
             double media = mediaWords();
             double desvio = desvioWords();
 
-            db.insertDB("Insert into LatenciaPalavras (Media,Desvio_Padrao) values("+media+","+desvio+");");
+            db.insertDB("Insert into LatenciaPalavras (Media,Desvio_Padrao) values("+media.ToString().Replace(',', '.') + ","+desvio.ToString().Replace(',', '.') + ");");
             id_LatenciaPalavras = db.getTableId("LatenciaPalavras");
 
         }
@@ -702,7 +717,8 @@ namespace AmI_Tp1
             foreach (int key in keys)
             {
                 desvioWords[key] = Math.Sqrt(desvioWords[key] / (n[key] - 1));
-                db.insertDB("insert into LatenciaTamanho(Tamnho,Media,Desvio_Padrao,Data_idData) values("+key+","+mediaWordsTam[key]+","+desvioWords[key]+","+idData+");");
+                db.insertDB("insert into LatenciaTamanho(Tamanho,Media,Desvio_Padrao,Data_idData) values("+key+","+
+                    mediaWordsTam[key].ToString().Replace(',', '.') + ","+desvioWords[key].ToString().Replace(',', '.') + ","+idData+");");
             }
 
         }

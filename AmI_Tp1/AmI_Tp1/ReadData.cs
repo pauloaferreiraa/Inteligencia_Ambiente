@@ -8,9 +8,20 @@ namespace AmI_Tp1
 {
     public class ReadData
     {
+        private string utilizador;
+
+        public ReadData(string utilizador)
+        {
+            this.utilizador = utilizador;
+        }
+
         public string readTop10()
         {
-            return null;
+            StringBuilder sb = new StringBuilder();
+
+                
+
+            return sb.ToString();
         }
     }
 }

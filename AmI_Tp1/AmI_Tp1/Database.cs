@@ -28,6 +28,7 @@ namespace AmI_Tp1
             }
             catch (Exception e)
             {
+                Console.WriteLine("ENTROU AQUI NA QUERY: " + query);
                 Console.WriteLine(e.Message);
             }
         }
@@ -42,6 +43,7 @@ namespace AmI_Tp1
             }
             catch (Exception e)
             {
+                
                 Console.WriteLine(e.StackTrace);
             }
             return reader;
@@ -49,7 +51,16 @@ namespace AmI_Tp1
 
         public int getTableId(string table)
         {
-            string column_name = "id" + table;
+            string column_name;
+            if (table.Equals("BackspaceCaracter") || table.Equals("BackspacePalavra"))
+            {
+                column_name = "idBackspace";
+            }
+            else
+            {
+                column_name = "id" + table;
+            }
+             
             string query = "select " + column_name + " from " + table + " order by " + column_name + " desc limit 1";
             int id = 0;
             MySqlDataReader reader = null;
@@ -61,6 +72,7 @@ namespace AmI_Tp1
                 {
                     id = Convert.ToInt32(reader.GetString(0));
                 }
+                reader.Close();
             }
             catch (Exception e)
             {

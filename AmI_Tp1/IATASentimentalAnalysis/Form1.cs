@@ -60,7 +60,7 @@ namespace IATASentimentalAnalysis
                 if (StemmedcheckBox.Checked)
                 {
                     IStemmer stemmer = new EnglishStemmer();
-                    for (int i = 0; i < words.Count; i++)
+                    for (int i = 0; i < w.Count; i++)
                     {
                         w[i] = stemmer.Stem(w[i]);
                     }

@@ -172,7 +172,8 @@ namespace IATASentimentalAnalysis
         {
             string fileName = "NRC-Emotion-Lexicon-v0.92-InManyLanguages.xlsx";
             string path = Path.Combine(Environment.CurrentDirectory, @"Data\", fileName);
-            string con = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + path + "; Extended Properties = Excel 12.0;";
+            Console.WriteLine(path);
+            string con = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + fileName + "; Extended Properties = Excel 12.0;";
             DataTable Contents = new DataTable();
             using (OleDbDataAdapter adapter = new OleDbDataAdapter("Select * From [P1$]", con))
             {

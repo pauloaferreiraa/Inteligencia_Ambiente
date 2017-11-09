@@ -123,6 +123,9 @@ namespace IATASentimentalAnalysis
                     }
                 }
             }
+            checkedListBox1.Items.Clear();
+            checkedListBox2.Items.Clear();
+            checkedListBox3.Items.Clear();
 
             for (int i = 1; i <= N; i++)
             {

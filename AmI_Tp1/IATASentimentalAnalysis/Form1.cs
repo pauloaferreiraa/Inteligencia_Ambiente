@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using Iveonik.Stemmers;
 using Syn.WordNet;
 
@@ -22,14 +23,16 @@ namespace IATASentimentalAnalysis
         public class Words
         {
             public string word;
+            public string StemmedWord;
             public int count = 1;
             public int[] WPParagraph;
             public double TF_IDF = 0;
 
-            public Words(string w, int nP)
+            public Words(string w, int nP, string stW)
             {
                 word = w;
                 WPParagraph = new int[nP];
+                StemmedWord = stW;
             }
         }
 
@@ -45,6 +48,7 @@ namespace IATASentimentalAnalysis
            
         }
         int nP;
+        bool stemm = false;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -61,10 +65,7 @@ namespace IATASentimentalAnalysis
                 w.RemoveAll(item => item.Length == 0);
                 if (StemmedcheckBox.Checked)
                 {
-                    for (int i = 0; i < w.Count; i++)
-                    {
-                        w[i] = stemmer.Stem(w[i]);
-                    }
+                    stemm = true;
                 }
             }
             else
@@ -80,7 +81,7 @@ namespace IATASentimentalAnalysis
                 }
                 else
                 {
-                    words.Add(new Words(wo, nP));
+                    words.Add(new Words(wo, nP, stemmer.Stem(wo)));
                 }
             }
 
@@ -101,7 +102,15 @@ namespace IATASentimentalAnalysis
                     int fim = i + y;
                     for (int j = inicio; j < fim; j++)
                     {
-                        s = s + " " + w[j];
+                        if (stemm)
+                        {
+                            s = s + " " + w[j];
+
+                        }
+                        else
+                        {
+                            s = s + " " + w[j];
+                        }
                     }
                     int value;
                     if (!ListasNGram[y].TryGetValue(s, out value))
@@ -137,9 +146,18 @@ namespace IATASentimentalAnalysis
 
         private void calculoTFIDF()
         {
-
-            string[] texto = richTextBox1.Text.Split(new string[] {Environment.NewLine, "\t", "\n"},
-                StringSplitOptions.RemoveEmptyEntries);
+            string[] texto;
+            if (nP == 1)
+            {
+                texto = richTextBox1.Text.Split(new string[] { "." },
+                    StringSplitOptions.RemoveEmptyEntries);
+                nP = richTextBox1.Text.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries).Length;
+            }
+            else
+            {
+                texto = richTextBox1.Text.Split(new string[] { Environment.NewLine, "\t", "\n" },
+                    StringSplitOptions.RemoveEmptyEntries);
+            }
 
             foreach (var word in words)
             {
@@ -162,7 +180,12 @@ namespace IATASentimentalAnalysis
             foreach (var LG in words)
             {
                 var myControl = new Label();
-                myControl.Text = LG.word + " : " + LG.TF_IDF;
+                if (stemm)
+                    myControl.Text = LG.StemmedWord + " : " + LG.TF_IDF;
+                else
+                {
+                    myControl.Text = LG.word + " : " + LG.TF_IDF;
+                }
                 myControl.Dock = DockStyle.Top;
 
                 panel1.Controls.Add(myControl);
@@ -230,6 +253,16 @@ namespace IATASentimentalAnalysis
             Console.WriteLine("suprise : " + suprise / countWords);
             Console.WriteLine("trust : " + trust / countWords);
 
+            chart1.Series.Add("Positive");
+            chart1.Series.Add("Negative");
+
+            chart1.Series["Positive"].Points.AddY(20);
+            chart1.Series["Negative"].Points.AddY(10);
+
+            chart1.Series["Positive"].ChartArea = "ChartArea1";
+            chart1.Series["Positive"].ChartArea = "ChartArea1";
+
+            chart1.Refresh();
         }
 
 
@@ -261,6 +294,11 @@ namespace IATASentimentalAnalysis
 
             calculoTFIDF();
             PolarityAnalysis();
+        }
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

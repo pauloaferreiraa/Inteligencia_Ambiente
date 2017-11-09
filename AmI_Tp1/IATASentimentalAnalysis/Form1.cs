@@ -48,18 +48,19 @@ namespace IATASentimentalAnalysis
 
         private void button1_Click(object sender, EventArgs e)
         {
+            IStemmer stemmer = new EnglishStemmer();
+            Tokenizer TK = new Tokenizer();
+
             List<string> w = new List<string>();
 
             if (richTextBox1.Text != String.Empty)
-            {
-                Tokenizer TK = new Tokenizer();
+            { 
                 nP= richTextBox1.Text.Split(new string[] { Environment.NewLine, "\t", "\n" }, StringSplitOptions.RemoveEmptyEntries).Length; // todo fazer uma estrutura melhor que guarde quantas vezes aparece uma palavra num paragrafo
                 string tex = richTextBox1.Text.Replace("\n", " ");
                 w = TK.Tokenize(Regex.Replace(tex, @"[^\w\s]", string.Empty));
                 w.RemoveAll(item => item.Length == 0);
                 if (StemmedcheckBox.Checked)
                 {
-                    IStemmer stemmer = new EnglishStemmer();
                     for (int i = 0; i < w.Count; i++)
                     {
                         w[i] = stemmer.Stem(w[i]);
@@ -193,7 +194,6 @@ namespace IATASentimentalAnalysis
 
             int countWords = 0;
 
-            int c = 0;
 
             // 41 a 50
             foreach (var w in words.OrderByDescending(key => key.TF_IDF))
@@ -216,24 +216,20 @@ namespace IATASentimentalAnalysis
                     sadness += Convert.ToInt32(dt[0].ItemArray[48]);
                     suprise += Convert.ToInt32(dt[0].ItemArray[49]);
                     trust += Convert.ToInt32(dt[0].ItemArray[50]);
-                    c++;
-                }
-                if (c > 10)
-                {
-                    break;
+                    countWords++;
                 }
             }
 
-            Console.WriteLine("Positive : "+positive/10);
-            Console.WriteLine("Negative : "+negative / 10);
-            Console.WriteLine("Anger : "+anger / 10);
-            Console.WriteLine("anticipation : " + anticipation / 10);
-            Console.WriteLine("disgust : " + disgust / 10);
-            Console.WriteLine("fear : " + fear / 10);
-            Console.WriteLine("joy : " + joy / 10);
-            Console.WriteLine("sadness : " + sadness / 10);
-            Console.WriteLine("suprise : " + suprise / 10);
-            Console.WriteLine("trust : " + trust / 10);
+            Console.WriteLine("Positive : "+positive/ countWords);
+            Console.WriteLine("Negative : "+negative / countWords);
+            Console.WriteLine("Anger : "+anger / countWords);
+            Console.WriteLine("anticipation : " + anticipation / countWords);
+            Console.WriteLine("disgust : " + disgust / countWords);
+            Console.WriteLine("fear : " + fear / countWords);
+            Console.WriteLine("joy : " + joy / countWords);
+            Console.WriteLine("sadness : " + sadness / countWords);
+            Console.WriteLine("suprise : " + suprise / countWords);
+            Console.WriteLine("trust : " + trust / countWords);
 
         }
 

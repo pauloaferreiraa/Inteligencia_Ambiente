@@ -254,7 +254,7 @@
             series2.Legend = "Legend1";
             series2.Name = "Series1";
             dataPoint3.AxisLabel = "";
-            dataPoint3.Label = "Raiva";
+            dataPoint3.Label = "";
             dataPoint3.LegendText = "Raiva";
             dataPoint4.AxisLabel = "Antecipação";
             dataPoint5.AxisLabel = "Desgosto";

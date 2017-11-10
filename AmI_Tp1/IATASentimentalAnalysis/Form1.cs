@@ -52,6 +52,7 @@ namespace IATASentimentalAnalysis
 
         private void button1_Click(object sender, EventArgs e)
         {
+            words.Clear();
             IStemmer stemmer = new EnglishStemmer();
             Tokenizer TK = new Tokenizer();
 
@@ -177,17 +178,12 @@ namespace IATASentimentalAnalysis
                 double IDF = Math.Log((double)nP / WinParagraph);
 
                 word.TF_IDF = TF * IDF;
-            }
-            words = words.OrderBy(n => n.TF_IDF).ToList();
-
-            foreach (var LG in words)
-            {
                 var myControl = new Label();
                 if (stemm)
-                    myControl.Text = LG.StemmedWord + " : " + LG.TF_IDF;
+                    myControl.Text = word.StemmedWord + " : " + word.TF_IDF;
                 else
                 {
-                    myControl.Text = LG.word + " : " + LG.TF_IDF;
+                    myControl.Text = word.word + " : " + word.TF_IDF;
                 }
                 myControl.Dock = DockStyle.Top;
 
@@ -256,27 +252,11 @@ namespace IATASentimentalAnalysis
             Console.WriteLine("suprise : " + suprise / countWords);
             Console.WriteLine("trust : " + trust / countWords);
 
-            //Add a new Legend(if needed) and do some formating
-            chart1.Legends.Add("Legenda");
-            chart1.Legends[0].LegendStyle = LegendStyle.Table;
-            chart1.Legends[0].Docking = Docking.Bottom;
-            chart1.Legends[0].Alignment = StringAlignment.Center;
-            chart1.Legends[0].Title = "Polaridade";
-            chart1.Legends[0].BorderColor = Color.Black;
-
             //set the chart-type to "Pie"
             chart1.Series["Series1"].ChartType = SeriesChartType.Pie;
            //Add some datapoints so the series. in this case you can pass the values to this method
             chart1.Series["Series1"].Points[0].YValues[0] = positive / countWords;
             chart1.Series["Series1"].Points[1].YValues[0] = negative / countWords;
-
-            //Add a new Legend(if needed) and do some formating
-            chart2.Legends.Add("Legenda");
-            chart2.Legends[0].LegendStyle = LegendStyle.Table;
-            chart2.Legends[0].Docking = Docking.Bottom;
-            chart2.Legends[0].Alignment = StringAlignment.Center;
-            chart2.Legends[0].Title = "Emoções";
-            chart2.Legends[0].BorderColor = Color.Black;
 
             //set the chart-type to "Pie"
             chart2.Series["Series1"].ChartType = SeriesChartType.Pie;
@@ -304,12 +284,12 @@ namespace IATASentimentalAnalysis
             foreach (var chkLB in checkedListBox2.CheckedItems)
             {
                 string[] part = chkLB.ToString().Split(' ');
-                Stopwords.Add(part[1]);
+                Stopwords.Add(part[1] + " " + part[2]);
             }
             foreach (var chkLB in checkedListBox3.CheckedItems)
             {
                 string[] part = chkLB.ToString().Split(' ');
-                Stopwords.Add(part[1]);
+                Stopwords.Add(part[1] + " " + part[2] + " " +part[3]);
             }
 
             foreach (var sw in Stopwords)

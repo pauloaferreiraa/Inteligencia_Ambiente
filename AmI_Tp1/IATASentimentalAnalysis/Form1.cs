@@ -256,16 +256,38 @@ namespace IATASentimentalAnalysis
             Console.WriteLine("suprise : " + suprise / countWords);
             Console.WriteLine("trust : " + trust / countWords);
 
-            chart1.Series.Add("Positive");
-            chart1.Series.Add("Negative");
+            //Add a new Legend(if needed) and do some formating
+            chart1.Legends.Add("Legenda");
+            chart1.Legends[0].LegendStyle = LegendStyle.Table;
+            chart1.Legends[0].Docking = Docking.Bottom;
+            chart1.Legends[0].Alignment = StringAlignment.Center;
+            chart1.Legends[0].Title = "Polaridade";
+            chart1.Legends[0].BorderColor = Color.Black;
 
-            chart1.Series["Positive"].Points.AddY(20);
-            chart1.Series["Negative"].Points.AddY(10);
+            //set the chart-type to "Pie"
+            chart1.Series["Series1"].ChartType = SeriesChartType.Pie;
+           //Add some datapoints so the series. in this case you can pass the values to this method
+            chart1.Series["Series1"].Points[0].YValues[0] = positive / countWords;
+            chart1.Series["Series1"].Points[1].YValues[0] = negative / countWords;
 
-            chart1.Series["Positive"].ChartArea = "ChartArea1";
-            chart1.Series["Positive"].ChartArea = "ChartArea1";
+            //Add a new Legend(if needed) and do some formating
+            chart2.Legends.Add("Legenda");
+            chart2.Legends[0].LegendStyle = LegendStyle.Table;
+            chart2.Legends[0].Docking = Docking.Bottom;
+            chart2.Legends[0].Alignment = StringAlignment.Center;
+            chart2.Legends[0].Title = "Emoções";
+            chart2.Legends[0].BorderColor = Color.Black;
 
-            chart1.Refresh();
+            //set the chart-type to "Pie"
+            chart2.Series["Series1"].ChartType = SeriesChartType.Pie;
+            chart2.Series["Series1"].Points[0].YValues[0] = anger / countWords;
+            chart2.Series["Series1"].Points[1].YValues[0] = anticipation / countWords;
+            chart2.Series["Series1"].Points[2].YValues[0] = disgust / countWords;
+            chart2.Series["Series1"].Points[3].YValues[0] = fear / countWords;
+            chart2.Series["Series1"].Points[4].YValues[0] = joy / countWords;
+            chart2.Series["Series1"].Points[5].YValues[0] = sadness / countWords;
+            chart2.Series["Series1"].Points[6].YValues[0] = suprise / countWords;
+            chart2.Series["Series1"].Points[7].YValues[0] = trust / countWords;
         }
 
 

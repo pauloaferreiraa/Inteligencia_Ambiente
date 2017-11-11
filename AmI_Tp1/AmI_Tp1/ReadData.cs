@@ -19,11 +19,11 @@ namespace AmI_Tp1
         }
 
         //id da data mais recente
-        public int getIdData()
+        public int getIdData(string user)
         {
             int id = 0;
 
-            string query = "select idData from data order by Data desc limit 1;";
+            string query = "select idData from data where utilizador='" + user + "'order by Data desc limit 1;";
 
             MySqlDataReader reader = null;
             try
@@ -46,7 +46,7 @@ namespace AmI_Tp1
         public string readTop10KeyStrokes(string utilizador)
         {
             StringBuilder sb = new StringBuilder();
-            int idDataRecente = getIdData();
+            int idDataRecente = getIdData(utilizador);
 
             string query = "select Caracter, Percentagem from data " +
                 "inner join utilizador on (data.Utilizador = utilizador.Nome) inner join top10 on (data.idData = top10.IdData) " +
@@ -74,7 +74,7 @@ namespace AmI_Tp1
 
         public string backspaceCaracter(string utilizador)
         {
-            int idData = getIdData();
+            int idData = getIdData(utilizador);
             string valor = "";
             string query = "select Percentagem from " +
                 "data inner join utilizador on(data.Utilizador = utilizador.Nome) " +
@@ -91,7 +91,7 @@ namespace AmI_Tp1
         
         public string writingTime(string utilizador)
         {
-            int idData = getIdData();
+            int idData = getIdData(utilizador);
             string query = "select Media,Desvio_Padrao from writingtime " +
                 "inner join data on(data.WritingTime_idWritingTime = writingtime.idWritingTime) " +
                 "inner join utilizador on(data.Utilizador = Nome) " +
@@ -108,7 +108,7 @@ namespace AmI_Tp1
 
         public string groupAnalysis(string utilizador)
         {
-            int idData = getIdData();
+            int idData = getIdData(utilizador);
             string query = "select HandGroup,Media,Desvio_Padrao from groupanalysis " +
                 "inner join data on(groupanalysis.Data_idData = data.idData) " +
                 "inner join utilizador on(data.Utilizador = Nome) " +
@@ -127,7 +127,7 @@ namespace AmI_Tp1
 
         public string top10Words(string utilizador)
         {
-            int idData = getIdData();
+            int idData = getIdData(utilizador);
             string query = "select Word,Percentagem from data inner join utilizador on (data.Utilizador = utilizador.Nome) " +
                 "inner join top10 on (data.idData = top10.IdData) " +
                 "inner join words on (top10.idTop10 = words.Top10_idTop10) " +
@@ -144,7 +144,7 @@ namespace AmI_Tp1
 
         public string backspacePalavras(string utilizador)
         {
-            int idData = getIdData();
+            int idData = getIdData(utilizador);
             string query = "select Percentagem from " +
                 "data inner join utilizador on (data.Utilizador = utilizador.Nome) " +
                 "inner join backspacepalavra on (idBackspace = data.Backspace_idBackspace) " +
@@ -161,7 +161,7 @@ namespace AmI_Tp1
 
         public string backspaceCorrigidas(string utilizador)
         {
-            int idData = getIdData();
+            int idData = getIdData(utilizador);
             string query = "select Tamanho,Percentagem from backspacescorrigidas " +
                 "inner join data on (backspacescorrigidas.Data_idData = data.idData) " +
                 "inner join utilizador on (data.Utilizador = Nome) " +
@@ -178,7 +178,7 @@ namespace AmI_Tp1
 
         public string latenciaPal(string utilizador)
         {
-            int idData = getIdData();
+            int idData = getIdData(utilizador);
             string query = "select Media,Desvio_Padrao from " +
                 "data inner join utilizador on (data.Utilizador = utilizador.Nome) " +
                 "inner join latenciapalavras on (idLatenciaPalavras = data.LatenciaPalavras_idLatenciaPalavras)" +
@@ -195,7 +195,7 @@ namespace AmI_Tp1
 
         public string latenciaTamanho(string utilizador)
         {
-            int idData = getIdData();
+            int idData = getIdData(utilizador);
             string query = "select Tamanho,Media,Desvio_Padrao " +
                 "from latenciatamanho inner join data on (latenciatamanho.Data_idData = data.idData) " +
                 "inner join utilizador on (data.Utilizador = Nome) " +

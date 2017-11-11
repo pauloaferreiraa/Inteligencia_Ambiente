@@ -37,9 +37,10 @@ namespace IATASentimentalAnalysis
         List<Words> words = new List<Words>();
         EmotionalClass EC = new EmotionalClass();
         string utilizador;
-        string data;
         int nP;
         bool stemm = false;
+        string text;
+        List<string> documentos= new List<string>();
 
         public Form1()
         {
@@ -289,10 +290,10 @@ namespace IATASentimentalAnalysis
                 Stopwords.Add(part[1] + " " + part[2] + " " +part[3]);
             }
             
-            foreach (var sw in Stopwords)
+            /*foreach (var sw in Stopwords)
             {
                 words.RemoveAll(x => x.word == sw);
-            }
+            }*/
 
 
             calculoTFIDF();
@@ -375,9 +376,42 @@ namespace IATASentimentalAnalysis
             return limpaStopWords;
         }
 
+
+
         private void button3_Click(object sender, EventArgs e)
         {
-            DialogResult dr = openFileDialog1.ShowDialog(); 
+            DialogResult dr = openFileDialog1.ShowDialog();
+            if (dr == DialogResult.OK) {
+                string file = openFileDialog1.FileName;
+                text = File.ReadAllText(file);
+
+            }
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = openFileDialog2.ShowDialog();
+            documentos.Clear();
+
+            if (dr == DialogResult.OK)
+            {
+
+                // Read the files
+                foreach (String file in openFileDialog1.FileNames)
+                {
+                    documentos.Add(File.ReadAllText(@file));
+                   
+                }
+                foreach (string s in documentos)
+                {
+                    s.ToLower();
+                    s.Replace( @"[^\w\s]","");
+                    s.Replace("\n", " ");
+                }
+                MessageBox.Show("Documentos Carregados");
+            }
+        }
+
+    
     }
 }

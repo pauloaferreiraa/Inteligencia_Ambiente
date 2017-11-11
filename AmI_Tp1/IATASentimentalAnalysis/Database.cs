@@ -25,10 +25,11 @@ namespace IATASentimentalAnalysis
             double Anger, double Antecipation, double Disgust, double Fear, double Joy, double Sadness, double Surprise, 
             double Trust)
         {
+            int id = getTableId("Emocoes");
             string query_insert = "INSERT INTO emocoes " +
-                                  "(idEmocoes, Positivo, Negativo, Anger, Antecipation, Disgust, Fear, Joy, Sadness, Surprise, Trust) " +
-                                  "VALUES(1,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10);" +
-                                  "update data set Emocoes_idEmocoes = 1 where Utilizador = '@val11' && Data = '@val12';";
+                                  "(Positivo, Negativo, Anger, Antecipation, Disgust, Fear, Joy, Sadness, Surprise, Trust) " +
+                                  "VALUES(@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10);" +
+                                  "update data set Emocoes_idEmocoes = @val13 where Utilizador = '@val11' && Data = '@val12';";
             try
             {
                 command = new MySqlCommand(query_insert, connection);
@@ -44,6 +45,7 @@ namespace IATASentimentalAnalysis
                 command.Parameters.AddWithValue("@val10", Trust);
                 command.Parameters.AddWithValue("@val11", utilizador);
                 command.Parameters.AddWithValue("@val12", data);
+                command.Parameters.AddWithValue("@val13", id);
                 
 
                 command.ExecuteNonQuery();

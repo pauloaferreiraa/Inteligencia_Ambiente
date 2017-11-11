@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
-namespace IATASentimentalAnalysis
+namespace AmI_Tp1
 {
     public class Database
     {
@@ -19,7 +19,20 @@ namespace IATASentimentalAnalysis
             connection = new MySqlConnection("SERVER=" + server + ";DATABASE=" + database + ";UID=" + uid + ";PASSWORD=" + password);
         }
 
-        
+        public void insertDB(string query)
+        {
+            try
+            {
+                command = new MySqlCommand(query, connection);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine("ENTROU AQUI NA QUERY: " + query);
+                Console.WriteLine(e.Message);
+            }
+        }
+
         public MySqlDataReader getResultsDB(string query)
         {
             MySqlDataReader reader = null;

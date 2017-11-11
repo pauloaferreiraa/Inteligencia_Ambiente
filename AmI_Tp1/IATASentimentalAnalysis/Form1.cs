@@ -251,7 +251,7 @@ namespace IATASentimentalAnalysis
 
             //set the chart-type to "Pie"
             chart1.Series["Series1"].ChartType = SeriesChartType.Pie;
-           //Add some datapoints so the series. in this case you can pass the values to this method
+            //Add some datapoints so the series. in this case you can pass the values to this method
             chart1.Series["Series1"].Points[0].YValues[0] = positive / countWords;
             chart1.Series["Series1"].Points[1].YValues[0] = negative / countWords;
 

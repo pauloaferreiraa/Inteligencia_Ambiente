@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
-namespace AmI_Tp1
+namespace IATASentimentalAnalysis
 {
     public class Database
     {
@@ -19,11 +19,33 @@ namespace AmI_Tp1
             connection = new MySqlConnection("SERVER=" + server + ";DATABASE=" + database + ";UID=" + uid + ";PASSWORD=" + password);
         }
 
-        public void insertDB(string query)
+        
+
+        public void insertEmocoes(string utilizador, string data, double Positivo, double Negativo, 
+            double Anger, double Antecipation, double Disgust, double Fear, double Joy, double Sadness, double Surprise, 
+            double Trust)
         {
+            string query_insert = "INSERT INTO emocoes " +
+                                  "(idEmocoes, Positivo, Negativo, Anger, Antecipation, Disgust, Fear, Joy, Sadness, Surprise, Trust) " +
+                                  "VALUES(1,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10);" +
+                                  "update data set Emocoes_idEmocoes = 1 where Utilizador = '@val11' && Data = '@val12';";
             try
             {
-                command = new MySqlCommand(query, connection);
+                command = new MySqlCommand(query_insert, connection);
+                command.Parameters.AddWithValue("@val1", Positivo);
+                command.Parameters.AddWithValue("@val2", Negativo);
+                command.Parameters.AddWithValue("@val3", Anger);
+                command.Parameters.AddWithValue("@val4", Antecipation);
+                command.Parameters.AddWithValue("@val5", Disgust);
+                command.Parameters.AddWithValue("@val6", Fear);
+                command.Parameters.AddWithValue("@val7", Joy);
+                command.Parameters.AddWithValue("@val8", Sadness);
+                command.Parameters.AddWithValue("@val9", Surprise);
+                command.Parameters.AddWithValue("@val10", Trust);
+                command.Parameters.AddWithValue("@val11", utilizador);
+                command.Parameters.AddWithValue("@val12", data);
+                
+
                 command.ExecuteNonQuery();
             }
             catch (Exception e)

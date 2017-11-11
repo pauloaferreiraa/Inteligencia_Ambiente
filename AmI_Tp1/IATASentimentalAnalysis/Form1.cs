@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Data;
-using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Iveonik.Stemmers;
@@ -37,18 +35,19 @@ namespace IATASentimentalAnalysis
         }
 
         List<Words> words = new List<Words>();
+        EmotionalClass EC = new EmotionalClass();
+        string utilizador;
+        string data;
+        int nP;
+        bool stemm = false;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-           
-        }
-        int nP;
-        bool stemm = false;
+
+      
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -64,9 +63,13 @@ namespace IATASentimentalAnalysis
                 string tex = richTextBox1.Text.Replace("\n", " ");
                 w = TK.Tokenize(Regex.Replace(tex, @"[^\w\s]", string.Empty));
                 w.RemoveAll(item => item.Length == 0);
+
                 if (StemmedcheckBox.Checked)
                 {
                     stemm = true;
+                }
+                else {
+                    stemm = false;
                 }
             }
             else
@@ -148,6 +151,7 @@ namespace IATASentimentalAnalysis
             }
         }
 
+
         private void calculoTFIDF()
         {
             string[] texto;
@@ -155,14 +159,14 @@ namespace IATASentimentalAnalysis
             {
                 texto = richTextBox1.Text.Split(new string[] { "." },
                     StringSplitOptions.RemoveEmptyEntries);
-                nP = richTextBox1.Text.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries).Length;
+                nP = texto.Length;
             }
             else
             {
                 texto = richTextBox1.Text.Split(new string[] { Environment.NewLine, "\t", "\n" },
                     StringSplitOptions.RemoveEmptyEntries);
             }
-
+            
             foreach (var word in words)
             {
                 int WinParagraph = 0;
@@ -191,16 +195,10 @@ namespace IATASentimentalAnalysis
             }
         }
 
+
         private void PolarityAnalysis()
         {
-            string fileName = "NRC-Emotion-Lexicon-v0.92-InManyLanguages.xlsx";
-            string path = Path.Combine(Environment.CurrentDirectory, @"Data\", fileName);
-            string con = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " + path + "; Extended Properties = Excel 12.0;";
-            DataTable Contents = new DataTable();
-            using (OleDbDataAdapter adapter = new OleDbDataAdapter("Select * From [P1$]", con))
-            {
-                adapter.Fill(Contents);
-            }
+           
 
             float positive = 0,
                 negative = 0,
@@ -214,43 +212,42 @@ namespace IATASentimentalAnalysis
                 trust = 0;
 
             int countWords = 0;
-
+            string str;
 
             // 41 a 50
             foreach (var w in words.OrderByDescending(key => key.TF_IDF))
             {
-                DataRow[] dt = Contents.Select("[English Word] like '" + w.word + "'");
-
-                if (dt.Length == 0)
+               
+               
+                str = EC.procuraPal(w.word);
+                string[] emocoes;
+                if (!String.IsNullOrEmpty(str))
                 {
-                    continue;
-                }
-                else
-                {
-                    positive += Convert.ToInt32(dt[0].ItemArray[41]);
-                    negative += Convert.ToInt32(dt[0].ItemArray[42]);
-                    anger += Convert.ToInt32(dt[0].ItemArray[43]);  
-                    anticipation += Convert.ToInt32(dt[0].ItemArray[44]);
-                    disgust += Convert.ToInt32(dt[0].ItemArray[45]);
-                    fear += Convert.ToInt32(dt[0].ItemArray[46]);
-                    joy += Convert.ToInt32(dt[0].ItemArray[47]);
-                    sadness += Convert.ToInt32(dt[0].ItemArray[48]);
-                    suprise += Convert.ToInt32(dt[0].ItemArray[49]);
-                    trust += Convert.ToInt32(dt[0].ItemArray[50]);
+                    emocoes = str.Split(';');
+                    positive += Convert.ToInt32(emocoes[41]);
+                    negative += Convert.ToInt32(emocoes[42]);
+                    anger += Convert.ToInt32(emocoes[43]);
+                    anticipation += Convert.ToInt32(emocoes[44]);
+                    disgust += Convert.ToInt32(emocoes[45]);
+                    fear += Convert.ToInt32(emocoes[46]);
+                    joy += Convert.ToInt32(emocoes[47]);
+                    sadness += Convert.ToInt32(emocoes[48]);
+                    suprise += Convert.ToInt32(emocoes[49]);
+                    trust += Convert.ToInt32(emocoes[50]);
                     countWords++;
                 }
             }
 
-            Console.WriteLine("Positive : "+positive/ countWords);
-            Console.WriteLine("Negative : "+negative / countWords);
-            Console.WriteLine("Anger : "+anger / countWords);
-            Console.WriteLine("anticipation : " + anticipation / countWords);
-            Console.WriteLine("disgust : " + disgust / countWords);
-            Console.WriteLine("fear : " + fear / countWords);
-            Console.WriteLine("joy : " + joy / countWords);
-            Console.WriteLine("sadness : " + sadness / countWords);
-            Console.WriteLine("suprise : " + suprise / countWords);
-            Console.WriteLine("trust : " + trust / countWords);
+            Console.WriteLine("Positive : "+(positive/ countWords)*100);
+            Console.WriteLine("Negative : "+(negative / countWords)*100);
+            Console.WriteLine("Anger : "+(anger / countWords)*100);
+            Console.WriteLine("anticipation : " +( anticipation / countWords)*100);
+            Console.WriteLine("disgust : " + (disgust / countWords)*100);
+            Console.WriteLine("fear : " + (fear / countWords)*100);
+            Console.WriteLine("joy : " + (joy / countWords)*100);
+            Console.WriteLine("sadness : " +( sadness / countWords)*100);
+            Console.WriteLine("suprise : " + (suprise / countWords)*100);
+            Console.WriteLine("trust : " + (trust / countWords)*100);
 
             //set the chart-type to "Pie"
             chart1.Series["Series1"].ChartType = SeriesChartType.Pie;
@@ -275,7 +272,7 @@ namespace IATASentimentalAnalysis
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            Stopwords.Clear();
             foreach (var chkLB in checkedListBox1.CheckedItems)
             {
                 string[] part = chkLB.ToString().Split(' ');
@@ -291,19 +288,96 @@ namespace IATASentimentalAnalysis
                 string[] part = chkLB.ToString().Split(' ');
                 Stopwords.Add(part[1] + " " + part[2] + " " +part[3]);
             }
-
+            
             foreach (var sw in Stopwords)
             {
                 words.RemoveAll(x => x.word == sw);
             }
 
+
             calculoTFIDF();
             PolarityAnalysis();
         }
 
-        private void chart1_Click(object sender, EventArgs e)
-        {
 
+
+        private List<Words> removeStopWords() {
+            List<Words> limpaStopWords = new List<Words>();
+            StringBuilder sb = new StringBuilder();
+
+            for (int i=0; i< words.Count; i++)
+            {
+                //Stopwords words 3-gram
+                if (i + 2 < words.Count)
+                {
+                    sb.Clear();
+                    if (stemm)
+                    {
+                        sb.Append(words[i].StemmedWord);
+                        sb.Append(' ');
+                        sb.Append(words[i + 1].StemmedWord);
+                        sb.Append(' ');
+                        sb.Append(words[i + 2].StemmedWord);
+                    }
+                    else {
+                        sb.Append(words[i].word);
+                        sb.Append(' ');
+                        sb.Append(words[i + 1].word);
+                        sb.Append(' ');
+                        sb.Append(words[i + 2].word);
+                    }
+
+                    if (Stopwords.Contains(sb.ToString()))
+                    {
+                        i = i + 2;
+                        continue;
+                    }
+
+                }
+                //Stopwords words comp 2-gram
+                if (i + 1 < words.Count)
+                {
+                    sb.Clear();
+                    if (stemm)
+                    {
+                        sb.Append(words[i].StemmedWord);
+                        sb.Append(' ');
+                        sb.Append(words[i + 1].StemmedWord);
+                      
+                    }
+                    else
+                    {
+                        sb.Append(words[i].word);
+                        sb.Append(' ');
+                        sb.Append(words[i + 1].word);
+
+                    }
+                    if (Stopwords.Contains(sb.ToString())){
+                        i++;
+                        continue;
+                    }
+                }
+                // Stopwords 1-gram
+
+                if (stemm)
+                {
+                    if (!Stopwords.Contains(words[i].StemmedWord)) {
+                        limpaStopWords.Add(words[i]);
+                    } 
+                }
+                else {
+                    if (!Stopwords.Contains(words[i].word)) {
+                        limpaStopWords.Add(words[i]);
+                    }
+                }
+
+            }
+            return limpaStopWords;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = openFileDialog1.ShowDialog(); 
         }
     }
 }

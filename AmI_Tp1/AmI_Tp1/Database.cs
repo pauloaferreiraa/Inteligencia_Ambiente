@@ -28,7 +28,7 @@ namespace AmI_Tp1
             }
             catch (Exception e)
             {
-                Console.WriteLine("ENTROU AQUI NA QUERY: " + query);
+                //Console.WriteLine("ENTROU AQUI NA QUERY: " + query);
                 Console.WriteLine(e.Message);
             }
         }

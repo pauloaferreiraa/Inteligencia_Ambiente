@@ -40,6 +40,7 @@ namespace IATASentimentalAnalysis
         int nP;
         bool stemm = false;
         string text;
+        string data;
         List<string> documentos= new List<string>();
 
         public Form1()
@@ -290,10 +291,10 @@ namespace IATASentimentalAnalysis
                 Stopwords.Add(part[1] + " " + part[2] + " " +part[3]);
             }
             
-            /*foreach (var sw in Stopwords)
+            foreach (var sw in Stopwords)
             {
                 words.RemoveAll(x => x.word == sw);
-            }*/
+            }
 
 
             calculoTFIDF();
@@ -378,16 +379,6 @@ namespace IATASentimentalAnalysis
 
 
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            DialogResult dr = openFileDialog1.ShowDialog();
-            if (dr == DialogResult.OK) {
-                string file = openFileDialog1.FileName;
-                text = File.ReadAllText(file);
-
-            }
-        }
-
         private void button4_Click(object sender, EventArgs e)
         {
             DialogResult dr = openFileDialog2.ShowDialog();
@@ -397,7 +388,7 @@ namespace IATASentimentalAnalysis
             {
 
                 // Read the files
-                foreach (String file in openFileDialog1.FileNames)
+                foreach (String file in openFileDialog2.FileNames)
                 {
                     documentos.Add(File.ReadAllText(@file));
                    
@@ -412,6 +403,17 @@ namespace IATASentimentalAnalysis
             }
         }
 
-    
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            DialogResult dr = openFileDialog1.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                string file = openFileDialog1.FileName;
+                string[] files = file.Split('\\');
+                data = files[files.Length - 1];
+                text = File.ReadAllText(file);
+
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace AmI_Tp1
     public class ProcDados
     {
         string utilizador;
+        string date_filename;
          List<int> time = new List<int>();
          List<string> events = new List<string>();
          List<string> keys = new List<string>();
@@ -23,7 +24,7 @@ namespace AmI_Tp1
         
 
         Database db;
-         int id_BackspaceCaracter;
+        int id_BackspaceCaracter;
         int id_BackSpacePalavra;
         int idTop10;
         int idData;
@@ -37,7 +38,7 @@ namespace AmI_Tp1
         public void init(string utilizador, string file, Database db) {
             this.db = db;
             this.utilizador = utilizador;
-           
+            this.date_filename = file;
             db.insertDB("Insert into Utilizador (Nome) select* from (select '"+utilizador+ "') as tmp WHERE NOT EXISTS (SELECT Nome FROM Utilizador WHERE Nome = '"+utilizador+"') LIMIT 1; ");
 
             ler(file);
@@ -409,10 +410,15 @@ namespace AmI_Tp1
             idTop10 = db.getTableId("Top10");
         }
 
-        public void Data() {
+        public void Data()
+        {
+            string[] filename_split = date_filename.Split('\\');
+            string filename = filename_split[filename_split.Length-1];
+            string data = filename.Remove(filename.Length - 4);
             db.insertDB("insert into Data(Data, Utilizador, Backspace_idBackspace, WritingTime_idWritingTime, " +
-                        "LatenciaPalavras_idLatenciaPalavras, BackspacePalavra_idBackspace)values(NOW(),'"+utilizador+"',"+id_BackspaceCaracter+","
-                                                                                                 +idWrittingTime+","+id_LatenciaPalavras+","+id_BackSpacePalavra+");");
+                        "LatenciaPalavras_idLatenciaPalavras, BackspacePalavra_idBackspace) " +
+                        "values (STR_TO_DATE('"+data.Replace('.',':').Replace('-','/') + "','%d/%m/%Y %H:%i:%s'),'" + utilizador+"',"+id_BackspaceCaracter+"," 
+                        +idWrittingTime+","+id_LatenciaPalavras+","+id_BackSpacePalavra+");");
             idData = db.getTableId("Data");
         }
 

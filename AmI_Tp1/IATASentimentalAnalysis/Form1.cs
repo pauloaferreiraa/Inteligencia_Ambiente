@@ -46,7 +46,7 @@ namespace IATASentimentalAnalysis
         List<string> words = new List<string>();
         public Form1()
         {
-            db = new Database("localhost", "mydb", "root", "");
+            db = new Database("localhost", "mydb", "root", "SLpaulO25");
             db.connect();
             InitializeComponent();
         }
@@ -308,17 +308,31 @@ namespace IATASentimentalAnalysis
                     countWords++;
                 }
             }
-            
-            db.insertEmocoes(utilizador,data.Replace('.',':').Replace('-','/'), (positive / countWords) * 100,
-                (negative / countWords) * 100,
-                (anger / countWords) * 100,
-                (anticipation / countWords) * 100,
-                (disgust / countWords) * 100,
-                (fear / countWords) * 100,
-                (joy / countWords) * 100,
-                (sadness / countWords) * 100,
-                (suprise / countWords) * 100,
-                (trust / countWords) * 100);
+            double pos_d= (positive / countWords) * 100;
+            string pos_s = pos_d.ToString().Replace(',', '.');
+            double neg= (negative / countWords) * 100;
+            string negativo = neg.ToString().Replace(',', '.');
+            double ang= (anger / countWords) * 100;
+            string anger_s = ang.ToString().Replace(',', '.');
+            double ant= (anticipation / countWords) * 100;
+            string ant_s = ant.ToString().Replace(',', '.');
+            double disg= (disgust / countWords) * 100;
+            string disg_s = disg.ToString().Replace(',', '.');
+            double fea = (fear / countWords) * 100;
+            string fea_s = fea.ToString().Replace(',', '.');
+            double j = (joy / countWords) * 100;
+            string j_s = j.ToString().Replace(',', '.');
+            double sad = (sadness / countWords) * 100;
+            string sad_s = sad.ToString().Replace(',', '.');
+            double surp = (suprise / countWords) * 100;
+            string surp_s = surp.ToString().Replace(',', '.');
+            double tr = (trust / countWords) * 100;
+            string tr_s = tr.ToString().Replace(',', '.');
+
+
+            db.insertEmocoes(pos_s,negativo,anger_s,ant_s,disg_s,fea_s,j_s,sad_s,surp_s,tr_s);
+
+            db.updateData(utilizador, data.Replace('.', ':').Replace('-', '/'));
 
             Console.WriteLine("Positive : "+(positive/ countWords)*100);
             Console.WriteLine("Negative : "+(negative / countWords)*100);

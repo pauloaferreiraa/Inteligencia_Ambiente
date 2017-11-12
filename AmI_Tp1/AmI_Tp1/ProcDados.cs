@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AmI_Tp1
 {
@@ -13,7 +14,7 @@ namespace AmI_Tp1
          List<int> time = new List<int>();
          List<string> events = new List<string>();
          List<string> keys = new List<string>();
-
+        private string data;
         List<Tuple<int, string, string, string>> dados = new List<Tuple<int, string, string, string>>();
         // tempo , caracter1 , caracter2 , Par
 
@@ -38,8 +39,22 @@ namespace AmI_Tp1
         public void init(string utilizador, string file, Database db) {
             this.db = db;
             this.utilizador = utilizador;
-            this.date_filename = file;
-            db.insertDB("Insert into Utilizador (Nome) select* from (select '"+utilizador+ "') as tmp WHERE NOT EXISTS (SELECT Nome FROM Utilizador WHERE Nome = '"+utilizador+"') LIMIT 1; ");
+
+            string[] filename_split = file.Split('\\');
+            string filename = filename_split[filename_split.Length - 1];
+            this.data = filename.Remove(filename.Length - 4);
+
+
+            if (db.checkUser(utilizador, data.Replace('.', ':').Replace('-', '/')))
+            {
+                MessageBox.Show("Este utilizador já inseriu um ficheiro com este nome", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
+
+
+                db.insertDB("Insert into Utilizador (Nome) select* from (select '"+utilizador+ "') as tmp WHERE NOT EXISTS (SELECT Nome FROM Utilizador WHERE Nome = '"+utilizador+"') LIMIT 1; ");
 
             ler(file);
             constrHand();
@@ -166,15 +181,6 @@ namespace AmI_Tp1
                 double valor = item.Value / (Convert.ToDouble(keys.Count)) * 100;
                 string val = valor.ToString().Replace(',', '.');
                 db.insertDB("Insert into Chars (Caracter, Percentagem,Top10) values('"+item.Key+"',"+val+","+ idTop10+");");
-               /* float valor = item.Value / (Convert.ToSingle(keys.Count)) * 100;
-                sb.Append(line.ToString("00"));
-                sb.Append("-  ");
-                sb.Append(item.Key);
-                sb.Append(' ', 15 - item.Key.Length);
-                sb.Append(valor.ToString()+"%");
-                sb.AppendLine();
-                line++;
-                */
             }           
             
         }
@@ -381,26 +387,6 @@ namespace AmI_Tp1
                 "," + idData + "," + StdDevSR.ToString().Replace(',', '.') + ");");
             db.insertDB("Insert into GroupAnalysis(HandGroup,Media,Data_idData,Desvio_Padrao) values('SS'," + mediaSS.ToString().Replace(',', '.') + 
                 "," + idData + "," + StdDevSS.ToString().Replace(',', '.') + ");");
-            /* return "Mean of the writing time of all Key Events: " + mediaAll +
-                      "\nStandard Deviation of the writing time of all Key Events:" + StdDev +
-                      "\nMean of the writing time of LL key groupings:" + mediaLL +
-                      "\nStandard Deviation of the writing time of LL key groupings:" + StdDevLL +
-                      "\nMean of the writing time of LR key groupings:" + mediaLR +
-                      "\nStandard Deviation of the writing time of LR key groupings:" + StdDevLR +
-                      "\nMean of the writing time of LS key groupings:" + mediaLS +
-                      "\nStandard Deviation of the writing time of LS key groupings:" + StdDevLS +
-                      "\nMean of the writing time of RL key groupings:" + mediaRL +
-                      "\nStandard Deviation of the writing time of RL key groupings:" + StdDevRL +
-                      "\nMean of the writing time of RR key groupings:" + mediaRR +
-                      "\nStandard Deviation of the writing time of RR key groupings:" + StdDevRR +
-                      "\nMean of the writing time of RS key groupings:" + mediaRS +
-                      "\nStandard Deviation of the writing time of RS key groupings:" + StdDevRS +
-                      "\nMean of the writing time of SL key groupings:" + mediaSL +
-                      "\nStandard Deviation of the writing time of SL key groupings:" + StdDevSL +
-                      "\nMean of the writing time of SR key groupings:" + mediaSR +
-                      "\nStandard Deviation of the writing time of SR key groupings:" + StdDevSR +
-                      "\nMean of the writing time of SS key groupings:" + mediaSS +
-                      "\nStandard Deviation of the writing time of SS key groupings:" + StdDevSS; ;*/
         }
 
 
@@ -412,14 +398,12 @@ namespace AmI_Tp1
 
         public void Data()
         {
-            string[] filename_split = date_filename.Split('\\');
-            string filename = filename_split[filename_split.Length-1];
-            string data = filename.Remove(filename.Length - 4);
             db.insertDB("insert into Data(Data, Utilizador, Backspace_idBackspace, WritingTime_idWritingTime, " +
-                        "LatenciaPalavras_idLatenciaPalavras, BackspacePalavra_idBackspace) " +
-                        "values (STR_TO_DATE('"+data.Replace('.',':').Replace('-','/') + "','%d/%m/%Y %H:%i:%s'),'" + utilizador+"',"+id_BackspaceCaracter+"," 
-                        +idWrittingTime+","+id_LatenciaPalavras+","+id_BackSpacePalavra+");");
+                            "LatenciaPalavras_idLatenciaPalavras, BackspacePalavra_idBackspace) " +
+                            "values (STR_TO_DATE('" + data.Replace('.', ':').Replace('-', '/') + "','%d/%m/%Y %H:%i:%s'),'" + utilizador + "'," + id_BackspaceCaracter + ","
+                            + idWrittingTime + "," + id_LatenciaPalavras + "," + id_BackSpacePalavra + ");");
             idData = db.getTableId("Data");
+            
         }
 
 

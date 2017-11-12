@@ -9,7 +9,6 @@ namespace AmI_Tp1
 {
     public class Database
     {
-        //OLAAAAA
         private MySqlConnection connection;
         private string database;
         private MySqlCommand command;
@@ -47,6 +46,32 @@ namespace AmI_Tp1
                 Console.WriteLine(e.Message);
             }
             return reader;
+        }
+
+        public bool checkUser(string utilizador, string date) //verifica se utilizador ja inseriu algum ficheiro com nome data
+        {
+            string query = "select exists(select * from data where Utilizador = '"+ utilizador + 
+                "' && Data = str_to_date('"+ date + "','%d/%m/%Y %H:%i:%s'));";
+            int x = 0;
+            MySqlDataReader reader = null;
+            try
+            {
+                command = new MySqlCommand(query, connection);
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    x = Convert.ToInt32(reader.GetString(0));
+                    Console.WriteLine(x);
+                }
+                reader.Close();
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+            }
+            if (x == 1) return true;
+            else return false;
         }
 
         public int getTableId(string table)

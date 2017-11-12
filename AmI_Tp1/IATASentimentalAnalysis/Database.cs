@@ -106,6 +106,7 @@ namespace IATASentimentalAnalysis
             return id;
         }
 
+
         public bool connect()
         {
             try

@@ -616,7 +616,7 @@ namespace AmI_Tp1
             {
 
                 PalvrasBackspaceTam[key] = (PalavrasCorrigidas[key] / Convert.ToDouble(PalvrasBackspaceTam[key])) * 100;
-                db.insertDB("Insert into BackspacesCorrigidas (Tamanho,Percentagem,Data_idData) values("+key+","+PalavrasCorrigidas[key].ToString().Replace(',','.')+","+idData+");");
+                db.insertDB("Insert into BackspacesCorrigidas (Tamanho,Percentagem,Data_idData) values("+key+","+ PalvrasBackspaceTam[key].ToString().Replace(',','.')+","+idData+");");
 
             }
 

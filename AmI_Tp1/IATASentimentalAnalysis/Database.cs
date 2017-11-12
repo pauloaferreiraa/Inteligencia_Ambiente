@@ -91,7 +91,6 @@ namespace IATASentimentalAnalysis
         public bool checkUser(string utilizador) //verifica se utilizador existe
         {
             string query = "select exists(select * from data where Utilizador = '" + utilizador +"');";
-            Console.WriteLine(query);
             int x = 0;
             MySqlDataReader reader = null;
             try

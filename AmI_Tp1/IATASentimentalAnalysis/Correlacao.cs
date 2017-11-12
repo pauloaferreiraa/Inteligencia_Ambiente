@@ -41,9 +41,6 @@ namespace IATASentimentalAnalysis
             for (int i = 1; i < colunas.Count; i++) {
 
                 double[] valor = rd.getInfo(utilizador,colunas[i]);
-                for (int x = 0; x < valor.Length; x++) {
-                    Console.WriteLine(colunas[i]+" Correlacao "+valor[x]);
-                }
                 row[0] = colunas[i];
 
                 for (int j = 1; j < colunas.Count; j++) {

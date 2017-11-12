@@ -46,7 +46,7 @@ namespace IATASentimentalAnalysis
         List<string> words = new List<string>();
         public Form1()
         {
-            db = new Database("localhost", "mydb", "root", "");
+            db = new Database("localhost", "mydb", "root", "SLpaulO25");
             db.connect();
             InitializeComponent();
         }

@@ -26,16 +26,20 @@ namespace IATASentimentalAnalysis
             double Anger, double Antecipation, double Disgust, double Fear, double Joy, double Sadness, double Surprise, 
             double Trust)
         {
-            int id = getTableId("Emocoes");
-            string query_insert = "INSERT INTO emocoes " +
-                                  "(Positivo, Negativo, Anger, Antecipation, Disgust, Fear, Joy, Sadness, Surprise, Trust) " +
-                                  "VALUES(" + Positivo + "," + Negativo + ","+ Anger + "," + Antecipation +
-                                  "," + Disgust + ","+ Fear + ","+ Joy +","+ Sadness +","+Surprise+","+Trust+");" +
-                                  "update data set Emocoes_idEmocoes = "+ id + " where Utilizador = '"+ utilizador +
-                                  "' && Data = str_to_date('"+ data + "','%d/%m/%Y %H:%i:%s');";
             try
             {
+
+                string query_insert = "INSERT INTO emocoes " +
+                                      "(Positivo, Negativo, Anger, Antecipation, Disgust, Fear, Joy, Sadness, Surprise, Trust) " +
+                                      "VALUES(" + Positivo + "," + Negativo + "," + Anger + "," + Antecipation +
+                                      "," + Disgust + "," + Fear + "," + Joy + "," + Sadness + "," + Surprise + "," +
+                                      Trust + ");";
                 command = new MySqlCommand(query_insert, connection);
+                command.ExecuteNonQuery();
+                int id = getTableId("Emocoes");
+                string query_update = "update data set Emocoes_idEmocoes = " + id + " where Utilizador = '" + utilizador +
+                                      "' && Data = str_to_date('" + data + "','%d/%m/%Y %H:%i:%s');";
+                command = new MySqlCommand(query_update,connection);
                 command.ExecuteNonQuery();
             }
             catch (Exception e)

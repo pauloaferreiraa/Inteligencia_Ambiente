@@ -28,7 +28,7 @@ namespace IATASentimentalAnalysis
                 case "Média da Latência de palavra":
                     return latenciaPal(utilizador,"Media").ToArray();
                 case "desvio da Latência de palavra":
-                    return latenciaPal(utilizador, "Desvio_Padrao").ToArray(); ;
+                    return latenciaPal(utilizador, "Desvio_Padrao").ToArray();
                 case "média digraph":
                     return writingTimeMediaDesvio(utilizador,"Media").ToArray();
                 case "desvio digraph":

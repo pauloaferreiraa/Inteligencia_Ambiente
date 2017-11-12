@@ -22,9 +22,9 @@ namespace IATASentimentalAnalysis
 
         
 
-        public void insertEmocoes(string utilizador, string data, double Positivo, double Negativo, 
-            double Anger, double Antecipation, double Disgust, double Fear, double Joy, double Sadness, double Surprise, 
-            double Trust)
+        public void insertEmocoes(string Positivo, string Negativo, 
+            string Anger, string Antecipation, string Disgust, string Fear, string Joy, string Sadness, string Surprise,
+            string Trust)
         {
             try
             {
@@ -36,16 +36,29 @@ namespace IATASentimentalAnalysis
                                       Trust + ");";
                 command = new MySqlCommand(query_insert, connection);
                 command.ExecuteNonQuery();
-                int id = getTableId("Emocoes");
 
-                string query_update = "update data set Emocoes_idEmocoes = " + id + " where Utilizador = '" + utilizador +
-                                      "' && Data = str_to_date('" + data + "','%d/%m/%Y %H:%i:%s');";
-                command = new MySqlCommand(query_update,connection);
-                command.ExecuteNonQuery();
             }
             catch (Exception e)
             {
                 //Console.WriteLine("ENTROU AQUI NA QUERY: " + query);
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public void updateData(string utilizador, string data)
+        {
+            int id = getTableId("Emocoes");
+
+            string query_update = "update data set Emocoes_idEmocoes = " + id + " where Utilizador = '" + utilizador +
+                                  "' && Data = str_to_date('" + data + "','%d/%m/%Y %H:%i:%s');";
+
+            try
+            {
+                command = new MySqlCommand(query_update, connection);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
                 Console.WriteLine(e.Message);
             }
         }
@@ -131,8 +144,8 @@ namespace IATASentimentalAnalysis
             {
                 column_name = "id" + table;
             }
-             
-            string query = "select " + column_name + " from " + table + " order by " + column_name + " desc limit 1";
+            
+            string query = "select " + column_name + " from " + table + " order by " + column_name + " desc limit 1;";
             int id = 0;
             MySqlDataReader reader = null;
             try

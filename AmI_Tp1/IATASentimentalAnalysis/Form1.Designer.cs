@@ -48,7 +48,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.StemmedcheckBox = new System.Windows.Forms.CheckBox();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -68,6 +67,8 @@
             this.button4 = new System.Windows.Forms.Button();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.button5 = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -114,14 +115,6 @@
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(461, 184);
             this.checkedListBox1.TabIndex = 4;
-            // 
-            // panel1
-            // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Location = new System.Drawing.Point(488, 307);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(365, 190);
-            this.panel1.TabIndex = 5;
             // 
             // tabControl1
             // 
@@ -329,13 +322,30 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(417, 25);
+            this.button5.Location = new System.Drawing.Point(404, 57);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(48, 30);
+            this.button5.Size = new System.Drawing.Size(73, 21);
             this.button5.TabIndex = 14;
-            this.button5.Text = "button5";
+            this.button5.Text = "Correlação";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(494, 307);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(354, 186);
+            this.listBox1.TabIndex = 15;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(491, 285);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(43, 13);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "TF_IDF";
             // 
             // Form1
             // 
@@ -343,6 +353,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(865, 509);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -351,7 +363,6 @@
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.StemmedcheckBox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.richTextBox1);
@@ -377,7 +388,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox StemmedcheckBox;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
@@ -397,5 +407,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.OpenFileDialog openFileDialog2;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Label label2;
     }
 }

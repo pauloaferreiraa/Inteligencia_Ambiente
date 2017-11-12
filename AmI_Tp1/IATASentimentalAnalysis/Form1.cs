@@ -42,7 +42,7 @@ namespace IATASentimentalAnalysis
         string text;
         string data;
         List<string> documentos= new List<string>();
-        Database db = new Database("localhost","mydb","root","SLpaulO25");
+        Database db = new Database("localhost","mydb","root","");
         List<string> words = new List<string>();
         public Form1()
         {
@@ -54,6 +54,7 @@ namespace IATASentimentalAnalysis
 
         private void button1_Click(object sender, EventArgs e)
         {
+            utilizador = "";
             IStemmer stemmer = new EnglishStemmer();
             Tokenizer TK = new Tokenizer();
             words.Clear();
@@ -243,14 +244,11 @@ namespace IATASentimentalAnalysis
                     tf_idf.Add(s, TF[s] * IDF(s));
                 }
             }
-
+            listBox1.Items.Clear();
             foreach (var item in tf_idf.OrderByDescending(r => r.Value))
             {
-                var myControl = new Label();
-                myControl.Text = item.Key + " : " + item.Value;
-                myControl.Dock = DockStyle.Top;
-
-                panel1.Controls.Add(myControl);
+                listBox1.Items.Add(item.Key + " : " + item.Value);
+               
             }
 
         }
@@ -555,8 +553,12 @@ namespace IATASentimentalAnalysis
 
         private void button5_Click(object sender, EventArgs e)
         {
-            Correlation c = new Correlation(utilizador,db);
-            c.Show();
+            string ut = textBox1.Text;
+            if (!String.IsNullOrEmpty(textBox1.Text))
+            {
+                Correlacao c = new Correlacao(ut, db);
+                c.Show();
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace IATASentimentalAnalysis
 {
-    partial class Correlation
+    partial class Correlacao
     {
         /// <summary>
         /// Required designer variable.

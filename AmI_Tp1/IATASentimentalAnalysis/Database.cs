@@ -9,7 +9,7 @@ namespace IATASentimentalAnalysis
 {
     public class Database
     {
-        //OLAAAAA
+     
         private MySqlConnection connection;
         private string database;
         private MySqlCommand command;

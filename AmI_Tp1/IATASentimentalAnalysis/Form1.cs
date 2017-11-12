@@ -34,16 +34,16 @@ namespace IATASentimentalAnalysis
             }
         }
 
-        List<Words> words = new List<Words>();
+       // List<Words> words = new List<Words>();
         EmotionalClass EC = new EmotionalClass();
         string utilizador;
-        int nP;
+       // int nP;
         bool stemm = false;
         string text;
         string data;
         List<string> documentos= new List<string>();
         Database db = new Database("localhost","mydb","root","SLpaulO25");
-
+        List<string> words = new List<string>();
         public Form1()
         {
             InitializeComponent();
@@ -54,42 +54,76 @@ namespace IATASentimentalAnalysis
 
         private void button1_Click(object sender, EventArgs e)
         {
-            words.Clear();
             IStemmer stemmer = new EnglishStemmer();
             Tokenizer TK = new Tokenizer();
+            words.Clear();
+            
 
-            List<string> w = new List<string>();
+            /* if (richTextBox1.Text != String.Empty)
+             { 
+                 nP= richTextBox1.Text.Split(new string[] { Environment.NewLine, "\t", "\n" }, StringSplitOptions.RemoveEmptyEntries).Length; // todo fazer uma estrutura melhor que guarde quantas vezes aparece uma palavra num paragrafo
+                 string tex = richTextBox1.Text.Replace("\n", " ");
+                 w = TK.Tokenize(Regex.Replace(tex, @"[^\w\s]", string.Empty));
+                 w.RemoveAll(item => item.Length == 0);
 
-            if (richTextBox1.Text != String.Empty)
-            { 
-                nP= richTextBox1.Text.Split(new string[] { Environment.NewLine, "\t", "\n" }, StringSplitOptions.RemoveEmptyEntries).Length; // todo fazer uma estrutura melhor que guarde quantas vezes aparece uma palavra num paragrafo
-                string tex = richTextBox1.Text.Replace("\n", " ");
-                w = TK.Tokenize(Regex.Replace(tex, @"[^\w\s]", string.Empty));
-                w.RemoveAll(item => item.Length == 0);
+                 if (StemmedcheckBox.Checked)
+                 {
+                     stemm = true;
+                 }
+                 else {
+                     stemm = false;
+                 }
+             }
+             else
+             {
+                 return;
+             }
 
-                if (StemmedcheckBox.Checked)
+             foreach (var wo in w)
+             {
+                 if (words.Any(n => n.word == wo))
+                 {
+                     words.Find(n => n.word == wo).count++;
+                 }
+                 else
+                 {
+                     words.Add(new Words(wo, nP, stemmer.Stem(wo)));
+                 }
+             }*/
+
+            if (!String.IsNullOrEmpty(textBox1.Text))
+            {
+                utilizador = textBox1.Text;
+                text = Regex.Replace(text, @"[^\w\s]", "").ToLower().Replace("\r\n", " ");
+                words = TK.Tokenize(text);
+                words.RemoveAll(item => item.Length == 0);
+ 
+            }
+            else {
+                if (!String.IsNullOrEmpty(richTextBox1.Text))
                 {
-                    stemm = true;
+                    documentos.Clear();
+                    string tex = Regex.Replace(richTextBox1.Text, @"[^\w\s]", "").ToLower();
+                    string[] paragrafos = tex.Split(new[] { '\r', '\n' });
+                    documentos = paragrafos.ToList();
+                    documentos.RemoveAt(0);
+
+                    words = TK.Tokenize(paragrafos[0]);
+                    words.RemoveAll(item => item.Length == 0);
                 }
                 else {
-                    stemm = false;
+                    return;
                 }
+
+            }
+
+            if (StemmedcheckBox.Checked)
+            {
+                stemm = true;
             }
             else
             {
-                return;
-            }
-
-            foreach (var wo in w)
-            {
-                if (words.Any(n => n.word == wo))
-                {
-                    words.Find(n => n.word == wo).count++;
-                }
-                else
-                {
-                    words.Add(new Words(wo, nP, stemmer.Stem(wo)));
-                }
+                stemm = false;
             }
 
             int N = 3; //numero de N-Grams
@@ -102,7 +136,7 @@ namespace IATASentimentalAnalysis
 
             for (int y = 1; y <= N; y++)
             {
-                for (int i = 0; i < (w.Count - y + 1); i++)
+                for (int i = 0; i < (words.Count - y + 1); i++)
                 {
                     String s = "";
                     int inicio = i;
@@ -111,12 +145,12 @@ namespace IATASentimentalAnalysis
                     {
                         if (stemm)
                         {
-                            s = s + " " + w[j];
+                            s = s + " " + stemmer.Stem(words[j]);
 
                         }
                         else
                         {
-                            s = s + " " + w[j];
+                            s = s + " " + words[j];
                         }
                     }
                     int value;
@@ -155,54 +189,152 @@ namespace IATASentimentalAnalysis
         }
 
 
-        private void calculoTFIDF()
+        private void calculoTFIDF(List<string> wordsLimpa)
         {
-            string[] texto;
-            if (nP == 1)
-            {
-                texto = richTextBox1.Text.Split(new string[] { "." },
-                    StringSplitOptions.RemoveEmptyEntries);
-                nP = texto.Length;
-            }
-            else
-            {
-                texto = richTextBox1.Text.Split(new string[] { Environment.NewLine, "\t", "\n" },
-                    StringSplitOptions.RemoveEmptyEntries);
-            }
-            
-            foreach (var word in words)
-            {
-                int WinParagraph = 0;
-                foreach (var parag in texto)
-                {
-                    if (parag.Contains(word.word))
-                    {
-                        WinParagraph++;
-                    }
+            IStemmer stemmer = new EnglishStemmer();
+            /* string[] texto;
+             if (nP == 1)
+             {
+                 texto = richTextBox1.Text.Split(new string[] { "." },
+                     StringSplitOptions.RemoveEmptyEntries);
+                 nP = texto.Length;
+             }
+             else
+             {
+                 texto = richTextBox1.Text.Split(new string[] { Environment.NewLine, "\t", "\n" },
+                     StringSplitOptions.RemoveEmptyEntries);
+             }
+
+             foreach (var word in words)
+             {
+                 int WinParagraph = 0;
+                 foreach (var parag in texto)
+                 {
+                     if (parag.Contains(word.word))
+                     {
+                         WinParagraph++;
+                     }
+                 }
+                 double TF = (double)word.count / words.Count;
+
+                 double IDF = Math.Log((double)nP / WinParagraph);
+
+                 word.TF_IDF = TF * IDF;
+                 var myControl = new Label();
+                 if (stemm)
+                     myControl.Text = word.StemmedWord + " : " + word.TF_IDF;
+                 else
+                 {
+                     myControl.Text = word.word + " : " + word.TF_IDF;
+                 }
+                 myControl.Dock = DockStyle.Top;
+
+                 panel1.Controls.Add(myControl);
+             }*/
+            Dictionary<string, double> TF = TermFreq(wordsLimpa);
+            Dictionary<string, double> tf_idf = new Dictionary<string, double>();
+            if (stemm) {
+                foreach (string s in TF.Keys) {
+                    tf_idf.Add(s,TF[s]*IDF(stemmer.Stem(s)));
                 }
-                double TF = (double)word.count / words.Count;
+            } else {
+                foreach (string s in TF.Keys)
+                {
+                    tf_idf.Add(s, TF[s] * IDF(s));
+                }
+            }
 
-                double IDF = Math.Log((double)nP / WinParagraph);
-
-                word.TF_IDF = TF * IDF;
+            foreach (var item in tf_idf.OrderByDescending(r => r.Value))
+            {
                 var myControl = new Label();
-                if (stemm)
-                    myControl.Text = word.StemmedWord + " : " + word.TF_IDF;
-                else
-                {
-                    myControl.Text = word.word + " : " + word.TF_IDF;
-                }
+                myControl.Text = item.Key + " : " + item.Value;
                 myControl.Dock = DockStyle.Top;
 
                 panel1.Controls.Add(myControl);
             }
+
         }
 
 
-        private void PolarityAnalysis()
+        // term frequency
+        public Dictionary<string, double> TermFreq(List<string> palavras)
+        {
+            IStemmer stemmer = new EnglishStemmer();
+            Dictionary<string, double> res = new Dictionary<string, double>();
+            if (stemm)
+            {
+                foreach (string s in palavras)
+                {
+                    if (res.ContainsKey(stemmer.Stem(s)))
+                    {
+                        res[stemmer.Stem(s)]++;
+                    }
+                    else
+                    {
+                        res.Add(stemmer.Stem(s), 1);
+                    }
+                }
+            }
+            else {
+                foreach (string s in palavras)
+                {
+                    if (res.ContainsKey(s))
+                    {
+                        res[s]++;
+                    }
+                    else
+                    {
+                        res.Add(s, 1);
+                    }
+                }
+            }
+            List<string> keys = res.Keys.ToList();
+            foreach (string s in keys) {
+                res[s] = res[s] /Convert.ToDouble(words.Count);
+            }
+
+            return res;
+        }
+
+        // Inverse Documnet Frequency
+        public double IDF(string palavra)
+        {
+            IStemmer stemmer = new EnglishStemmer();
+            Tokenizer TK = new Tokenizer();
+            int count = 1;
+            if (stemm) {
+                foreach (string s in documentos)
+                {
+                    string str =stemmer.Stem(s);
+                    if (TK.Tokenize(s).Contains(palavra))
+                    {
+                        count++;
+                    }
+                }
+            }
+            else
+            {
+                foreach (string s in documentos)
+                {
+                    if (TK.Tokenize(s).Contains(palavra))
+                    {
+                        count++;
+                    }
+                }
+            }
+            return Math.Log(documentos.Count + 1 / Convert.ToDouble(count));
+        }
+
+
+
+
+
+
+
+        private void PolarityAnalysis(List<string> wordsLimpa)
         {
            
-
+            
             float positive = 0,
                 negative = 0,
                 anger = 0,
@@ -218,11 +350,11 @@ namespace IATASentimentalAnalysis
             string str;
 
             // 41 a 50
-            foreach (var w in words.OrderByDescending(key => key.TF_IDF))
+            foreach (var w in wordsLimpa)
             {
                
                
-                str = EC.procuraPal(w.word);
+                str = EC.procuraPal(w);
                 string[] emocoes;
                 if (!String.IsNullOrEmpty(str))
                 {
@@ -302,23 +434,18 @@ namespace IATASentimentalAnalysis
                 string[] part = chkLB.ToString().Split(' ');
                 Stopwords.Add(part[1] + " " + part[2] + " " +part[3]);
             }
-            
-            foreach (var sw in Stopwords)
-            {
-                words.RemoveAll(x => x.word == sw);
-            }
 
-
-            calculoTFIDF();
-            PolarityAnalysis();
+            List<string> stpWordsRemovidas = removeStopWords();
+            calculoTFIDF(stpWordsRemovidas);
+            PolarityAnalysis(stpWordsRemovidas);
         }
 
 
 
-        private List<Words> removeStopWords() {
-            List<Words> limpaStopWords = new List<Words>();
+        private List<string> removeStopWords() {
+            List<string> limpaStopWords = new List<string>();
             StringBuilder sb = new StringBuilder();
-
+            IStemmer stemmer = new EnglishStemmer();
             for (int i=0; i< words.Count; i++)
             {
                 //Stopwords words 3-gram
@@ -327,18 +454,18 @@ namespace IATASentimentalAnalysis
                     sb.Clear();
                     if (stemm)
                     {
-                        sb.Append(words[i].StemmedWord);
+                        sb.Append(stemmer.Stem(words[i]));
                         sb.Append(' ');
-                        sb.Append(words[i + 1].StemmedWord);
+                        sb.Append(stemmer.Stem(words[i + 1]));
                         sb.Append(' ');
-                        sb.Append(words[i + 2].StemmedWord);
+                        sb.Append(stemmer.Stem(words[i + 2]));
                     }
                     else {
-                        sb.Append(words[i].word);
+                        sb.Append(words[i]);
                         sb.Append(' ');
-                        sb.Append(words[i + 1].word);
+                        sb.Append(words[i + 1]);
                         sb.Append(' ');
-                        sb.Append(words[i + 2].word);
+                        sb.Append(words[i + 2]);
                     }
 
                     if (Stopwords.Contains(sb.ToString()))
@@ -354,16 +481,16 @@ namespace IATASentimentalAnalysis
                     sb.Clear();
                     if (stemm)
                     {
-                        sb.Append(words[i].StemmedWord);
+                        sb.Append(stemmer.Stem(words[i]));
                         sb.Append(' ');
-                        sb.Append(words[i + 1].StemmedWord);
+                        sb.Append(stemmer.Stem(words[i + 1]));
                       
                     }
                     else
                     {
-                        sb.Append(words[i].word);
+                        sb.Append(words[i]);
                         sb.Append(' ');
-                        sb.Append(words[i + 1].word);
+                        sb.Append(words[i + 1]);
 
                     }
                     if (Stopwords.Contains(sb.ToString())){
@@ -375,12 +502,12 @@ namespace IATASentimentalAnalysis
 
                 if (stemm)
                 {
-                    if (!Stopwords.Contains(words[i].StemmedWord)) {
+                    if (!Stopwords.Contains(stemmer.Stem(words[i]))) {
                         limpaStopWords.Add(words[i]);
                     } 
                 }
                 else {
-                    if (!Stopwords.Contains(words[i].word)) {
+                    if (!Stopwords.Contains(words[i])) {
                         limpaStopWords.Add(words[i]);
                     }
                 }
@@ -402,15 +529,12 @@ namespace IATASentimentalAnalysis
                 // Read the files
                 foreach (String file in openFileDialog2.FileNames)
                 {
-                    documentos.Add(File.ReadAllText(@file));
+                    string s = File.ReadAllText(@file);
+                    s = Regex.Replace(s, @"[^\w\s]", "").ToLower().Replace("\r\n", " ");
+                    documentos.Add(s);
                    
                 }
-                foreach (string s in documentos)
-                {
-                    s.ToLower();
-                    s.Replace( @"[^\w\s]","");
-                    s.Replace("\n", " ");
-                }
+            
                 MessageBox.Show("Documentos Carregados");
             }
         }
@@ -427,6 +551,12 @@ namespace IATASentimentalAnalysis
                 text = File.ReadAllText(file);
 
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Correlation c = new Correlation(utilizador,db);
+            c.Show();
         }
     }
 }

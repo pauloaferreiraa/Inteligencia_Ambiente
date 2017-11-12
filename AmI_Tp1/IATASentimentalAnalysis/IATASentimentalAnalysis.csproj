@@ -54,6 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Correlation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Correlation.Designer.cs">
+      <DependentUpon>Correlation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Database.cs" />
     <Compile Include="EmotionalClass.cs" />
     <Compile Include="Form1.cs">
@@ -70,6 +76,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Correlation.resx">
+      <DependentUpon>Correlation.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

@@ -66,7 +66,7 @@ namespace IATASentimentalAnalysis
             {
                 utilizador = textBox1.Text;
                 Console.WriteLine(utilizador);
-                if (!db.checkUser(utilizador))
+                if (!db.checkUserFile(utilizador,data.Replace('.', ':').Replace('-', '/')))
                 {
                     MessageBox.Show("Este utilizador não existe", "Erro",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -492,7 +492,7 @@ namespace IATASentimentalAnalysis
         private void button5_Click(object sender, EventArgs e)
         {
             string ut = textBox1.Text;
-            if (!db.checkUserFile(ut,data.Replace('.',':').Replace('-','/')))
+            if (!db.checkUser(ut))
             {
                 MessageBox.Show("Este utilizador não existe", "Erro",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);

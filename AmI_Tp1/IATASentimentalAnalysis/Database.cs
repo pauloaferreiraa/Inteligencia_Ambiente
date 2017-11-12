@@ -37,6 +37,7 @@ namespace IATASentimentalAnalysis
                 command = new MySqlCommand(query_insert, connection);
                 command.ExecuteNonQuery();
                 int id = getTableId("Emocoes");
+
                 string query_update = "update data set Emocoes_idEmocoes = " + id + " where Utilizador = '" + utilizador +
                                       "' && Data = str_to_date('" + data + "','%d/%m/%Y %H:%i:%s');";
                 command = new MySqlCommand(query_update,connection);

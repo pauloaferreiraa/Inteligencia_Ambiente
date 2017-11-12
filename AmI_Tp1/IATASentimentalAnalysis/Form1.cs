@@ -46,7 +46,7 @@ namespace IATASentimentalAnalysis
         List<string> words = new List<string>();
         public Form1()
         {
-            db = new Database("localhost", "mydb", "root", "");
+            db = new Database("localhost", "mydb", "root", "SLpaulO25");
             db.connect();
             InitializeComponent();
         }
@@ -60,47 +60,22 @@ namespace IATASentimentalAnalysis
             IStemmer stemmer = new EnglishStemmer();
             Tokenizer TK = new Tokenizer();
             words.Clear();
-            
-
-            /* if (richTextBox1.Text != String.Empty)
-             { 
-                 nP= richTextBox1.Text.Split(new string[] { Environment.NewLine, "\t", "\n" }, StringSplitOptions.RemoveEmptyEntries).Length; // todo fazer uma estrutura melhor que guarde quantas vezes aparece uma palavra num paragrafo
-                 string tex = richTextBox1.Text.Replace("\n", " ");
-                 w = TK.Tokenize(Regex.Replace(tex, @"[^\w\s]", string.Empty));
-                 w.RemoveAll(item => item.Length == 0);
-
-                 if (StemmedcheckBox.Checked)
-                 {
-                     stemm = true;
-                 }
-                 else {
-                     stemm = false;
-                 }
-             }
-             else
-             {
-                 return;
-             }
-
-             foreach (var wo in w)
-             {
-                 if (words.Any(n => n.word == wo))
-                 {
-                     words.Find(n => n.word == wo).count++;
-                 }
-                 else
-                 {
-                     words.Add(new Words(wo, nP, stemmer.Stem(wo)));
-                 }
-             }*/
+           
 
             if (!String.IsNullOrEmpty(textBox1.Text))
             {
                 utilizador = textBox1.Text;
+                Console.WriteLine(utilizador);
+                if (!db.checkUser(utilizador))
+                {
+                    MessageBox.Show("Este utilizador não existe", "Erro",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 text = Regex.Replace(text, @"[^\w\s]", "").ToLower().Replace("\r\n", " ");
                 words = TK.Tokenize(text);
                 words.RemoveAll(item => item.Length == 0);
- 
+                
             }
             else {
                 if (!String.IsNullOrEmpty(richTextBox1.Text))
@@ -195,45 +170,6 @@ namespace IATASentimentalAnalysis
         private void calculoTFIDF(List<string> wordsLimpa)
         {
             IStemmer stemmer = new EnglishStemmer();
-            /* string[] texto;
-             if (nP == 1)
-             {
-                 texto = richTextBox1.Text.Split(new string[] { "." },
-                     StringSplitOptions.RemoveEmptyEntries);
-                 nP = texto.Length;
-             }
-             else
-             {
-                 texto = richTextBox1.Text.Split(new string[] { Environment.NewLine, "\t", "\n" },
-                     StringSplitOptions.RemoveEmptyEntries);
-             }
-
-             foreach (var word in words)
-             {
-                 int WinParagraph = 0;
-                 foreach (var parag in texto)
-                 {
-                     if (parag.Contains(word.word))
-                     {
-                         WinParagraph++;
-                     }
-                 }
-                 double TF = (double)word.count / words.Count;
-
-                 double IDF = Math.Log((double)nP / WinParagraph);
-
-                 word.TF_IDF = TF * IDF;
-                 var myControl = new Label();
-                 if (stemm)
-                     myControl.Text = word.StemmedWord + " : " + word.TF_IDF;
-                 else
-                 {
-                     myControl.Text = word.word + " : " + word.TF_IDF;
-                 }
-                 myControl.Dock = DockStyle.Top;
-
-                 panel1.Controls.Add(myControl);
-             }*/
             Dictionary<string, double> TF = TermFreq(wordsLimpa);
             Dictionary<string, double> tf_idf = new Dictionary<string, double>();
             if (stemm) {
@@ -372,7 +308,7 @@ namespace IATASentimentalAnalysis
                     countWords++;
                 }
             }
-            /*
+            
             db.insertEmocoes(utilizador,data.Replace('.',':').Replace('-','/'), (positive / countWords) * 100,
                 (negative / countWords) * 100,
                 (anger / countWords) * 100,
@@ -382,7 +318,7 @@ namespace IATASentimentalAnalysis
                 (joy / countWords) * 100,
                 (sadness / countWords) * 100,
                 (suprise / countWords) * 100,
-                (trust / countWords) * 100);*/
+                (trust / countWords) * 100);
 
             Console.WriteLine("Positive : "+(positive/ countWords)*100);
             Console.WriteLine("Negative : "+(negative / countWords)*100);
@@ -556,6 +492,12 @@ namespace IATASentimentalAnalysis
         private void button5_Click(object sender, EventArgs e)
         {
             string ut = textBox1.Text;
+            if (!db.checkUserFile(ut,data.Replace('.',':').Replace('-','/')))
+            {
+                MessageBox.Show("Este utilizador não existe", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if (!String.IsNullOrEmpty(textBox1.Text))
             {
                 Correlacao c = new Correlacao(ut, db);

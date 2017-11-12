@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.DataVisualization.Charting;
 using MySql.Data.MySqlClient;
 
 namespace IATASentimentalAnalysis
@@ -28,26 +29,13 @@ namespace IATASentimentalAnalysis
             int id = getTableId("Emocoes");
             string query_insert = "INSERT INTO emocoes " +
                                   "(Positivo, Negativo, Anger, Antecipation, Disgust, Fear, Joy, Sadness, Surprise, Trust) " +
-                                  "VALUES(@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10);" +
-                                  "update data set Emocoes_idEmocoes = @val13 where Utilizador = '@val11' && Data = '@val12';";
+                                  "VALUES(" + Positivo + "," + Negativo + ","+ Anger + "," + Antecipation +
+                                  "," + Disgust + ","+ Fear + ","+ Joy +","+ Sadness +","+Surprise+","+Trust+");" +
+                                  "update data set Emocoes_idEmocoes = "+ id + " where Utilizador = '"+ utilizador +
+                                  "' && Data = str_to_date('"+ data + "','%d/%m/%Y %H:%i:%s');";
             try
             {
                 command = new MySqlCommand(query_insert, connection);
-                command.Parameters.AddWithValue("@val1", Positivo);
-                command.Parameters.AddWithValue("@val2", Negativo);
-                command.Parameters.AddWithValue("@val3", Anger);
-                command.Parameters.AddWithValue("@val4", Antecipation);
-                command.Parameters.AddWithValue("@val5", Disgust);
-                command.Parameters.AddWithValue("@val6", Fear);
-                command.Parameters.AddWithValue("@val7", Joy);
-                command.Parameters.AddWithValue("@val8", Sadness);
-                command.Parameters.AddWithValue("@val9", Surprise);
-                command.Parameters.AddWithValue("@val10", Trust);
-                command.Parameters.AddWithValue("@val11", utilizador);
-                command.Parameters.AddWithValue("@val12", data);
-                command.Parameters.AddWithValue("@val13", id);
-                
-
                 command.ExecuteNonQuery();
             }
             catch (Exception e)
@@ -56,6 +44,60 @@ namespace IATASentimentalAnalysis
                 Console.WriteLine(e.Message);
             }
         }
+
+        public bool checkUserFile(string utilizador, string date) //verifica se utilizador e ficheiro existem
+        {
+            string query = "select exists(select * from data where Utilizador = '" + utilizador +
+                           "' && Data = str_to_date('" + date + "','%d/%m/%Y %H:%i:%s'));";
+            int x = 0;
+            MySqlDataReader reader = null;
+            try
+            {
+                command = new MySqlCommand(query, connection);
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    x = Convert.ToInt32(reader.GetString(0));
+                    Console.WriteLine(x);
+                }
+                reader.Close();
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+            }
+            if (x == 1) return true;
+            else return false;
+        }
+
+        public bool checkUser(string utilizador) //verifica se utilizador existe
+        {
+            string query = "select exists(select * from data where Utilizador = '" + utilizador +"');";
+            Console.WriteLine(query);
+            int x = 0;
+            MySqlDataReader reader = null;
+            try
+            {
+                command = new MySqlCommand(query, connection);
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    x = Convert.ToInt32(reader.GetString(0));
+                    Console.WriteLine(x);
+                }
+                reader.Close();
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+            }
+            if (x == 1) return true;
+            else return false;
+        }
+
+
 
         public MySqlDataReader getResultsDB(string query)
         {

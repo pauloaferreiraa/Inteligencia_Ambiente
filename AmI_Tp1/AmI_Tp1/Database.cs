@@ -61,7 +61,7 @@ namespace AmI_Tp1
                 while (reader.Read())
                 {
                     x = Convert.ToInt32(reader.GetString(0));
-                    Console.WriteLine(x);
+                    
                 }
                 reader.Close();
             }

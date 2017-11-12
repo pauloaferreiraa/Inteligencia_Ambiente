@@ -65,7 +65,7 @@ namespace IATASentimentalAnalysis
             string query = "select Percentagem from " +
                 "data inner join utilizador on(data.Utilizador = utilizador.Nome) " +
                 "inner join backspacecaracter on(idBackspace = data.Backspace_idBackspace) " +
-                "where utilizador = + '" + utilizador +  "';";
+                "where utilizador ='" + utilizador +  "';";
             MySqlDataReader reader = db.getResultsDB(query);
             while (reader.Read())
             {

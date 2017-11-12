@@ -44,7 +44,7 @@ namespace IATASentimentalAnalysis
                 row[0] = colunas[i];
 
                 for (int j = 1; j < colunas.Count; j++) {
-                    row[j] = Correlation.Pearson(valor, rd.getInfo(utilizador, colunas[j])).ToString();
+                      row[j] = Correlation.Pearson(valor, rd.getInfo(utilizador, colunas[j])).ToString();
                 }
 
                 dataGridView1.Rows.Add(row);

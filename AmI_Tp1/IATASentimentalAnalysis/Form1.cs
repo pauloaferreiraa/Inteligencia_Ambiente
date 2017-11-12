@@ -42,10 +42,12 @@ namespace IATASentimentalAnalysis
         string text;
         string data;
         List<string> documentos= new List<string>();
-        Database db = new Database("localhost","mydb","root","");
+        Database db;
         List<string> words = new List<string>();
         public Form1()
         {
+            db = new Database("localhost", "mydb", "root", "");
+            db.connect();
             InitializeComponent();
         }
 

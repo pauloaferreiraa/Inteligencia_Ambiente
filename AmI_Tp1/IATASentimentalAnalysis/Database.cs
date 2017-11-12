@@ -64,7 +64,6 @@ namespace IATASentimentalAnalysis
             {
                 command = new MySqlCommand(query,connection);
                 reader = command.ExecuteReader();
-                Console.WriteLine(reader==null);
             }
             catch (Exception e)
             {

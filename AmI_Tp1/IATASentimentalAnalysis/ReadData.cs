@@ -26,33 +26,33 @@ namespace IATASentimentalAnalysis
                 case "Palavra backSpace":
                     return backspacePalavras(utilizador).ToArray();
                 case "Média da Latência de palavra":
-                    return null;
+                    return latenciaPal(utilizador,"Media").ToArray();
                 case "desvio da Latência de palavra":
-                    return null;
+                    return latenciaPal(utilizador, "Desvio_Padrao").ToArray(); ;
                 case "média digraph":
-                    return null;
+                    return writingTimeMediaDesvio(utilizador,"Media").ToArray();
                 case "desvio digraph":
-                    return null;
+                    return writingTimeMediaDesvio(utilizador, "Desvio_Padrao").ToArray(); ;
                 case "Positivo":
-                    return null;
+                    return getEmocao(utilizador,"Positivo").ToArray();
                 case "Negativo":
-                    return null;
+                    return getEmocao(utilizador, "Negativo").ToArray();
                 case "Anger":
-                    return null;
+                    return getEmocao(utilizador, "Anger").ToArray();
                 case "Anticipation":
-                    return null;
+                    return getEmocao(utilizador, "Antecipation").ToArray();
                 case "Disgust":
-                    return null;
+                    return getEmocao(utilizador, "Disgust").ToArray();
                 case "Fear":
-                    return null;
+                    return getEmocao(utilizador, "Fear").ToArray();
                 case "Joy":
-                    return null;
+                    return getEmocao(utilizador, "Joy").ToArray();
                 case "Sadness":
-                    return null;
+                    return getEmocao(utilizador, "Sadness").ToArray();
                 case "Surprise":
-                    return null;
+                    return getEmocao(utilizador, "Surprise").ToArray();
                 case "Trust":
-                    return null;
+                    return getEmocao(utilizador, "Trust").ToArray();
                 default:
                     return null;
             }
@@ -76,22 +76,37 @@ namespace IATASentimentalAnalysis
         }
         
 
-        public string writingTime(string utilizador)
+        public List<double> writingTimeMediaDesvio(string utilizador, string opcao)
         {
             
-            string query = "select Media,Desvio_Padrao from writingtime " +
+            string query = "select "+opcao+" from writingtime " +
                 "inner join data on(data.WritingTime_idWritingTime = writingtime.idWritingTime) " +
                 "inner join utilizador on(data.Utilizador = Nome) " +
                 "where utilizador = '" + utilizador+ "';";
             MySqlDataReader reader = db.getResultsDB(query);
-            string valor = "";
+            List<double> valor = new List<double>();
             while (reader.Read())
             {
-                valor = reader.GetString(0) + " " + reader.GetString(1);
+                valor.Add(reader.GetDouble(0));
             }
             reader.Close();
             return valor;
         }
+
+        public List<double> getEmocao(string utilizador, string opcao)
+        {
+
+            string query = "select " + opcao + " from emocoes inner join data on (data.Emocoes_idEmocoes = idEmocoes) where Utilizador ='"+utilizador+"';";
+            MySqlDataReader reader = db.getResultsDB(query);
+            List<double> valor = new List<double>();
+            while (reader.Read())
+            {
+                valor.Add(reader.GetDouble(0));
+            }
+            reader.Close();
+            return valor;
+        }
+
 
         public string groupAnalysis(string utilizador)
         {
@@ -148,18 +163,18 @@ namespace IATASentimentalAnalysis
             return sb.ToString();
         }
 
-        public string latenciaPal(string utilizador)
+        public List<double> latenciaPal(string utilizador,string opcao)
         {
           
-            string query = "select Media,Desvio_Padrao from " +
+            string query = "select "+opcao+" from " +
                 "data inner join utilizador on (data.Utilizador = utilizador.Nome) " +
                 "inner join latenciapalavras on (idLatenciaPalavras = data.LatenciaPalavras_idLatenciaPalavras)" +
                 "where utilizador = '" + utilizador + "';";
             MySqlDataReader reader = db.getResultsDB(query);
-            string valor = "";
+            List<double> valor = new List<double>();
             while (reader.Read())
             {
-                valor = reader.GetString(0) + " " + reader.GetString(1);
+                valor.Add(reader.GetDouble(0));
             }
             reader.Close();
             return valor;

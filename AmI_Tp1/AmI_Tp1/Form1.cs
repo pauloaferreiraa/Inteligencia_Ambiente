@@ -15,7 +15,7 @@ namespace AmI_Tp1
     {
         private string User;
         private ReadData rd;
-        Database db = new Database("localhost","mydb","root","SLpaulO25");
+        Database db = new Database("localhost","mydb","root","");
         public Form1()
         {
             db.connect();

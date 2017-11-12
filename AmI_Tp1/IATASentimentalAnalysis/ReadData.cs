@@ -22,41 +22,54 @@ namespace IATASentimentalAnalysis
             switch (valor)
             {
                 case "Keystroke Backspace":
-                    return backspaceCaracterS(utilizador).ToArray();
+                    return backspaceCaracterS(utilizador).Select(item => Convert.ToDouble(item)).ToArray();
                 case "Palavra backSpace":
-                    return backspacePalavras(utilizador).ToArray();
+                    return getArray(backspacePalavras(utilizador));
                 case "Média da Latência de palavra":
-                    return latenciaPal(utilizador,"Media").ToArray();
+                    return getArray(latenciaPal(utilizador,"Media"));
                 case "desvio da Latência de palavra":
-                    return latenciaPal(utilizador, "Desvio_Padrao").ToArray(); ;
+                    return getArray(latenciaPal(utilizador, "Desvio_Padrao")) ;
                 case "média digraph":
-                    return writingTimeMediaDesvio(utilizador,"Media").ToArray();
+                    return getArray(writingTimeMediaDesvio(utilizador,"Media"));
                 case "desvio digraph":
-                    return writingTimeMediaDesvio(utilizador, "Desvio_Padrao").ToArray(); ;
+                    return getArray(writingTimeMediaDesvio(utilizador, "Desvio_Padrao")) ;
                 case "Positivo":
-                    return getEmocao(utilizador,"Positivo").ToArray();
+                    return getArray(getEmocao(utilizador,"Positivo"));
                 case "Negativo":
-                    return getEmocao(utilizador, "Negativo").ToArray();
+                    return getArray(getEmocao(utilizador, "Negativo"));
                 case "Anger":
-                    return getEmocao(utilizador, "Anger").ToArray();
+                    return getArray(getEmocao(utilizador, "Anger"));
                 case "Anticipation":
-                    return getEmocao(utilizador, "Antecipation").ToArray();
+                    return getArray(getEmocao(utilizador, "Antecipation"));
                 case "Disgust":
-                    return getEmocao(utilizador, "Disgust").ToArray();
+                    return getArray(getEmocao(utilizador, "Disgust"));
                 case "Fear":
-                    return getEmocao(utilizador, "Fear").ToArray();
+                    return getArray(getEmocao(utilizador, "Fear"));
                 case "Joy":
-                    return getEmocao(utilizador, "Joy").ToArray();
+                    return getArray(getEmocao(utilizador, "Joy"));
                 case "Sadness":
-                    return getEmocao(utilizador, "Sadness").ToArray();
+                    return getArray(getEmocao(utilizador, "Sadness"));
                 case "Surprise":
-                    return getEmocao(utilizador, "Surprise").ToArray();
+                    return getArray(getEmocao(utilizador, "Surprise"));
                 case "Trust":
-                    return getEmocao(utilizador, "Trust").ToArray();
+                    return getArray(getEmocao(utilizador, "Trust"));
                 default:
                     return null;
             }
         }
+
+
+
+        public double[] getArray(List<double> val) {
+            double[] res = new double[val.Count];
+            for (int i = 0; i < val.Count; i++) {
+                res[i] = val[i];
+            }
+            return res;
+        }
+
+
+
 
         public List<double> backspaceCaracterS(string utilizador)
         {

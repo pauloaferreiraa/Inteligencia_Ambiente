@@ -423,6 +423,7 @@ namespace IATASentimentalAnalysis
                 string file = openFileDialog1.FileName;
                 string[] files = file.Split('\\');
                 data = files[files.Length - 1];
+                data = data.Remove(data.Length-4);
                 text = File.ReadAllText(file);
 
             }

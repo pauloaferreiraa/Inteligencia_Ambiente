@@ -118,7 +118,7 @@ namespace AmI_Tp1
             StringBuilder sb = new StringBuilder();
             while (reader.Read())
             {
-                sb.Append(reader.GetString(0)).Append(" ").Append(reader.GetString(1)).Append(" ").
+                sb.Append(reader.GetString(0)).Append(' ',10).Append(reader.GetString(1)).Append(' ',16- reader.GetString(1).Length).
                     Append(reader.GetString(2)).AppendLine();
             }
             reader.Close();
@@ -127,6 +127,7 @@ namespace AmI_Tp1
 
         public string top10Words(string utilizador)
         {
+            
             int idData = getIdData(utilizador);
             string query = "select Word,Percentagem from data inner join utilizador on (data.Utilizador = utilizador.Nome) " +
                 "inner join top10 on (data.idData = top10.IdData) " +
@@ -136,7 +137,7 @@ namespace AmI_Tp1
             StringBuilder sb = new StringBuilder();
             while (reader.Read())
             {
-                sb.Append(reader.GetString(0)).Append(" ").Append(reader.GetString(1)).Append(" ").AppendLine();
+                sb.Append(reader.GetString(0)).Append(' ',20 -reader.GetString(0).Length).Append(reader.GetString(1)).Append(" ").AppendLine();
             }
             reader.Close();
             return sb.ToString();
@@ -170,7 +171,8 @@ namespace AmI_Tp1
             StringBuilder sb = new StringBuilder();
             while (reader.Read())
             {
-                sb.Append(reader.GetString(0)).Append(" ").Append(reader.GetString(1)).Append(" ").AppendLine("%");
+                int x = Int32.Parse(reader.GetString(0));
+                sb.Append(x.ToString("00")).Append(' ',10).Append(reader.GetString(1)).Append(" ").AppendLine("%");
             }
             reader.Close();
             return sb.ToString();
@@ -204,7 +206,8 @@ namespace AmI_Tp1
             StringBuilder sb = new StringBuilder();
             while (reader.Read())
             {
-                sb.Append(reader.GetString(0)).Append(" ").Append(reader.GetString(1)).Append(" ").
+                int x = Int32.Parse(reader.GetString(0));
+                sb.Append(x.ToString("00")).Append(' ',6).Append(reader.GetString(1)).Append(' ',16- reader.GetString(1).Length).
                     Append(reader.GetString(2)).AppendLine();
             }
             reader.Close();

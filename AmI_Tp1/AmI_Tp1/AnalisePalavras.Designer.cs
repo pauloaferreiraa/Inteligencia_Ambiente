@@ -45,6 +45,7 @@
             this.latenciaPalDPTB = new System.Windows.Forms.RichTextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -175,7 +176,7 @@
             this.latenciaTamTB.Location = new System.Drawing.Point(560, 167);
             this.latenciaTamTB.Name = "latenciaTamTB";
             this.latenciaTamTB.ReadOnly = true;
-            this.latenciaTamTB.Size = new System.Drawing.Size(234, 203);
+            this.latenciaTamTB.Size = new System.Drawing.Size(257, 203);
             this.latenciaTamTB.TabIndex = 15;
             this.latenciaTamTB.Text = "";
             // 
@@ -207,11 +208,21 @@
             this.label10.TabIndex = 21;
             this.label10.Text = "Desvio Padrão";
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(746, 148);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(40, 13);
+            this.label11.TabIndex = 22;
+            this.label11.Text = "Desvio";
+            // 
             // AnalisePalavras
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(990, 580);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.latenciaPalDPTB);
@@ -255,5 +266,6 @@
         private System.Windows.Forms.RichTextBox latenciaPalDPTB;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
     }
 }
